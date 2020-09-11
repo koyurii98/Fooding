@@ -1,3 +1,4 @@
 # FOODing
 
--reactNative
+-   React-Native
+-   Expo Cli
