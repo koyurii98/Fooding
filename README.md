@@ -1,3 +1,0 @@
-# FOODing
-
--reactNative
