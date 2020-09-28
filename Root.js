@@ -17,7 +17,7 @@ export default function App() {
             tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
                 if (route.name === '홈') {
-                    iconName = 'ios-information-circle'
+                    iconName = 'ios-home'
                 } else if (route.name === '목록') {
                     iconName = 'ios-cart';
                 } else if (route.name === '결제내역') {
