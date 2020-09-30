@@ -1,3 +1,4 @@
 # FOODing
 
 -reactNative
+-jun&yul
