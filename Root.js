@@ -41,5 +41,4 @@ export default function App() {
             <Tab.Screen name="프로필" component={Profile} />
         </Tab.Navigator>
     );
-  }
-  
+}

@@ -55,17 +55,19 @@ export default function App() {
       <Stack.Navigator>
         {
           !user ? 
-          <Stack.Screen 
-            name="Root" 
-            component={Root} 
-            options={{ 
-              headerShown : true, 
-              headerStyle: { height : 90 }, 
-              headerTitle: props => <Header {...props} /> 
-            }} 
-          />
+          <>
+            <Stack.Screen 
+              name="Root" 
+              component={Root} 
+              options={{ 
+                headerShown : true, 
+                headerStyle: { height : 90 }, 
+                headerTitle: props => <Header {...props} /> 
+              }} 
+            />
+          </>
           :
-          <Stack.Screen name="Root" component={First} options={{ headerShown : false }} />
+          <Stack.Screen name="First" component={First} options={{ headerShown : false }} />
         }
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Detail from './Detail';
+
+const HomeStack = createStackNavigator();
 
 function Home({ route, navigation }) {
     const [ menuBorder, setMenuBorder ] = useState(0); 
@@ -24,8 +29,9 @@ function Home({ route, navigation }) {
         { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
     ];
 
-    const Item = ({ name, content, user, distance, state }) => {
-        return <View style={homeStyle.listBox}>
+    const Item = ({ id, name, content, user, distance, state }) => {
+        const obj = { id, name, content, user, distance, state };
+        return <TouchableOpacity style={homeStyle.listBox} onPress={() => itemClick(obj)}>
             <View style={homeStyle.listImage}></View>
             <View style={homeStyle.listContent}>
                 <View style={homeStyle.listLayout}>
@@ -41,7 +47,7 @@ function Home({ route, navigation }) {
                     <Text>{distance}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     }
 
     function refreshFunc() {
@@ -51,20 +57,19 @@ function Home({ route, navigation }) {
         }, 1000);
     }
 
+    function itemClick(obj) {
+        navigation.navigate("detail", obj);
+    }
+
     function menuClick(num) {
         setMenuBorder(num);
     }
 
-    return (
-        <View>
-            {/* baner */}
-            <View style={homeStyle.baner}>
-                <Text style={homeStyle.banerText}>
-                    배달비 0원{"\n"}
-                    식재료부터 반찬까지{"\n"}
-                    직거래로 내가 원하는 음식을 찾아보세요!
-                </Text>
-                <View style={homeStyle.banerImage}></View>
+    const Home = () => {
+        return <View>
+            {/* banner */}
+            <View style={homeStyle.banner}>
+                <Image source={require("../assets/Banner.png")} />
             </View>
 
             {/* menu */}
@@ -95,6 +100,7 @@ function Home({ route, navigation }) {
                     data={example}
                     renderItem={
                         ({item}) => <Item 
+                            id={item.id}
                             name={item.name}
                             content={item.content}
                             user={item.user}
@@ -103,18 +109,25 @@ function Home({ route, navigation }) {
                         />
                     }
                     keyExtractor={item => item.id.toString()}
-                    contentContainerStyle={{ paddingBottom: 346 }}
+                    contentContainerStyle={{ paddingBottom: 336 }}
                     refreshing={refresh}
                     onRefresh={refreshFunc}
                 />
             </SafeAreaView>
         </View>
+    }
+
+    return (
+        <HomeStack.Navigator>
+            <HomeStack.Screen name="home" component={Home} />
+            <HomeStack.Screen name="detail" component={Detail} />
+        </HomeStack.Navigator>
     );
 }
 
 const homeStyle = StyleSheet.create({
-    // baner
-    baner: {
+    // banner
+    banner: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
@@ -122,20 +135,6 @@ const homeStyle = StyleSheet.create({
         backgroundColor: "#e9aaff",
         height: 123,
         position: "relative"
-    },
-    banerText: {
-        color: "white", 
-        margin: 12, 
-        zIndex: 1
-    },
-    banerImage: {
-        width: 110, 
-        height: "100%", 
-        backgroundColor: "blue", 
-        position: "absolute", 
-        right: 0, 
-        bottom: 0, 
-        zIndex: -1
     },
 
     // menu
