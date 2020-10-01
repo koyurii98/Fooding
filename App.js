@@ -1,9 +1,12 @@
 import 'react-native-gesture-handler';
 // import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Image,TextInput } from 'react-native';
 // import axios from 'axios';
 // import socketIO from 'socket.io-client';
+
+import Logo from './assets/Header-Logo.png';
+import SearchIcon from './assets/search.png';
 
 import ENV_FUNC from './environment';
 // const { SERVER_URL } = ENV_FUNC();
@@ -36,11 +39,14 @@ export default function App() {
       
   //   }
   // }
-
+  const searchText='지금 먹고싶은 음식은 무엇인가요?';
   const Header = () => {
-    return <View style={{ margin: 10, flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-      <Text>Fooding</Text>
-      <Text>search bar</Text>
+    return <View style={styles.HeaderBox}>
+      <Image style={styles.HeaderLogo} source={Logo} />
+      <View style={styles.searchBox}>
+        <TextInput style={styles.searchInput} placeholder={searchText}/>
+        <Image style={styles.searchIcon} source={SearchIcon}/>
+     </View>
     </View>
   }
 
@@ -54,7 +60,7 @@ export default function App() {
             component={Root} 
             options={{ 
               headerShown : true, 
-              headerStyle: { height : 120 }, 
+              headerStyle: { height : 90 }, 
               headerTitle: props => <Header {...props} /> 
             }} 
           />
@@ -65,3 +71,39 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles=  StyleSheet.create({
+  HeaderBox:{
+    flex:1,
+    justifyContent:"space-between",
+    alignItems:"center",
+    flexDirection:"row",
+  },
+  HeaderLogo:{
+    resizeMode:"contain",
+    width:100,
+  },
+  searchInput:{
+    fontSize:14,
+  },
+  searchBox:{
+    flex:1,
+    justifyContent:"space-between",
+    alignItems:"center",
+    flexDirection:"row",
+    borderWidth:1,
+    borderColor:'#757575',
+    paddingLeft:8,
+    paddingRight:8,
+    height:37,
+    borderRadius:20,
+    marginLeft:15,
+    fontSize:14,
+  },
+  searchIcon:{
+    resizeMode:"contain",
+    width:20,
+    height:20,
+    margin:3,
+  }
+})
