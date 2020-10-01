@@ -3,10 +3,16 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 function Chat({ route, navigation }) {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Chat Screen</Text>
+        <View style={styles.chattingRoom}>
+            
         </View>
     );
 }
+const styles = StyleSheet.create({
+    chattingRoom:{
+
+    }
+  })
+  
 
 export default Chat;
