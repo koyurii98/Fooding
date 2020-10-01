@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 // import axios from 'axios';
+// import socketIO from 'socket.io-client';
 
 import ENV_FUNC from './environment';
 // const { SERVER_URL } = ENV_FUNC();
@@ -17,9 +18,15 @@ import First from './screen/First';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
+  const [ socket, setSocket ] = useState(null);
 
   // useEffect(() => {
-  //   storageCheck();
+  //   // storageCheck();
+  //   const client_io = socketIO.connect(SERVER_URL);
+  //   client_io.on("chat msg", msg => {
+  //     console.log(msg);
+  //   });
+  //   setSocket(client_io);
   // }, [user]);
 
   // async function storageCheck() {
