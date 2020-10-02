@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Detail from './Detail';
+import Item from '../component/Item';
 
 const HomeStack = createStackNavigator();
 
@@ -28,27 +29,6 @@ function Home({ route, navigation }) {
         { id: 8, name: "반찬9", image: "", content: "설명 부분입니다. 해당 내용은 반찬9 입니다.", user: "꼬부맘9", distance: "18km 이내", state: "판매" },
         { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
     ];
-
-    const Item = ({ id, name, content, user, distance, state }) => {
-        const obj = { id, name, content, user, distance, state };
-        return <TouchableOpacity style={homeStyle.listBox} onPress={() => itemClick(obj)}>
-            <View style={homeStyle.listImage}></View>
-            <View style={homeStyle.listContent}>
-                <View style={homeStyle.listLayout}>
-                    <Text style={{ fontSize: 20, marginBottom: 5 }}>{name}</Text>
-                    <Text style={{ color: "red" }}>{state}</Text>
-                </View>
-                <View>
-                    <Text style={{ color: "gray" }} numberOfLines={1}>{content}</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", position: "absolute", bottom: 0 }}>
-                    <Text>{user}</Text>
-                    <View style={homeStyle.listLine}></View>
-                    <Text>{distance}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    }
 
     function refreshFunc() {
         setRefresh(true);
@@ -106,6 +86,7 @@ function Home({ route, navigation }) {
                             user={item.user}
                             distance={item.distance}
                             state={item.state}
+                            itemClick={itemClick}
                         />
                     }
                     keyExtractor={item => item.id.toString()}
@@ -146,41 +127,6 @@ const homeStyle = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderStyle: "solid"
     },
-
-    // list
-    listBox: {
-        display: "flex", 
-        flexDirection: "row", 
-        height: 130,
-        borderBottomWidth: 0.2,
-        borderColor: "gray", 
-        padding: 15,
-        margin: 10
-    },
-    listImage: {
-        height: "100%",
-        width: "30%", 
-        backgroundColor: "blue"
-    },
-    listContent: {
-        display: "flex", 
-        flexDirection: "column", 
-        width: "70%",
-        marginLeft: 5,
-        position: "relative"
-    },
-    listLayout: {
-        display: "flex", 
-        flexDirection: "row", 
-        justifyContent: "space-between"
-    },
-    listLine: {
-        height: 20, 
-        borderWidth: 1, 
-        borderStyle: "solid",
-        marginLeft: 8,
-        marginRight: 8
-    }
 });
 
 export default Home;
