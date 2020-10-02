@@ -81,10 +81,11 @@ const styles=  StyleSheet.create({
   },
   HeaderLogo:{
     resizeMode:"contain",
-    width:100,
+    width:"28%",
   },
   searchInput:{
     fontSize:14,
+    width:"90%"
   },
   searchBox:{
     flex:1,

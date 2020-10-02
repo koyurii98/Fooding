@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 
 function Home({ route, navigation }) {
     const [ menuBorder, setMenuBorder ] = useState(0); 
@@ -37,8 +37,10 @@ function Home({ route, navigation }) {
                 </View>
                 <View style={{ display: "flex", flexDirection: "row", position: "absolute", bottom: 0 }}>
                     <Text>{user}</Text>
-                    <View style={homeStyle.listLine}></View>
-                    <Text>{distance}</Text>
+                    <View style={{alignItems:"center",flexDirection:"row"}}>
+                        <View style={homeStyle.listLine}></View>
+                        <Text style={{color:"#e15959"}}>{distance}</Text>
+                    </View>
                 </View>
             </View>
         </View>
@@ -48,7 +50,7 @@ function Home({ route, navigation }) {
         setRefresh(true);
         setTimeout(() => {
             setRefresh(false);
-        }, 1000);
+        },300);
     }
 
     function menuClick(num) {
@@ -90,7 +92,7 @@ function Home({ route, navigation }) {
             </View>
 
             {/* list */}
-            <SafeAreaView style={homeStyle.list}>
+            <ScrollView style={homeStyle.list}>
                 <FlatList 
                     data={example}
                     renderItem={
@@ -107,7 +109,7 @@ function Home({ route, navigation }) {
                     refreshing={refresh}
                     onRefresh={refreshFunc}
                 />
-            </SafeAreaView>
+            </ScrollView>
         </View>
     );
 }
@@ -145,18 +147,22 @@ const homeStyle = StyleSheet.create({
         alignItems: "center",
         height: 50,
         borderBottomWidth: 0.5,
-        borderStyle: "solid"
+        borderBottomColor:"#d9d9d9",
+        backgroundColor:"#ffffff",
     },
-
+    list:{
+        height:"100%",
+        backgroundColor:"#ffffff",
+    },
     // list
     listBox: {
         display: "flex", 
         flexDirection: "row", 
         height: 130,
-        borderBottomWidth: 0.2,
-        borderColor: "gray", 
+        borderWidth: 0.2,
+        borderColor:"#d9d9d9", 
         padding: 15,
-        margin: 10
+        margin:5, 
     },
     listImage: {
         height: "100%",
@@ -176,11 +182,11 @@ const homeStyle = StyleSheet.create({
         justifyContent: "space-between"
     },
     listLine: {
-        height: 20, 
-        borderWidth: 1, 
+        height: 18, 
+        borderWidth: 0.8, 
         borderStyle: "solid",
         marginLeft: 8,
-        marginRight: 8
+        marginRight: 8,
     }
 });
 
