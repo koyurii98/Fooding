@@ -124,7 +124,12 @@ const homeStyle = StyleSheet.create({
         alignItems: "center",
         height: 50,
         borderBottomWidth: 0.5,
-        borderStyle: "solid"
+        borderBottomColor:"#d9d9d9",
+        backgroundColor:"#ffffff",
+    },
+    list:{
+        height:"100%",
+        backgroundColor:"#ffffff",
     },
 });
 
