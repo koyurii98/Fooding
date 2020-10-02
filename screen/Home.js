@@ -9,15 +9,7 @@ const HomeStack = createStackNavigator();
 
 function Home({ route, navigation }) {
     const [ menuBorder, setMenuBorder ] = useState(0); 
-    const menu = [
-        { num: 0, text: "NOW" },
-        { num: 1, text: "반찬" },
-        { num: 2, text: "베이커리" },
-        { num: 3, text: "식재료" }
-    ];
-
-    const [ refresh, setRefresh ] = useState(false);
-    const example = [
+    const [ itemList, setItemmList ] = useState([
         { id: 0, name: "반찬1", image: "", content: "설명 부분입니다. 해당 내용은 반찬1 입니다.", user: "꼬부맘1", distance: "10km 이내", state: "판매" },
         { id: 1, name: "반찬2", image: "", content: "설명 부분입니다. 해당 내용은 반찬2 입니다.", user: "꼬부맘2", distance: "11km 이내", state: "요청" },
         { id: 2, name: "반찬3", image: "", content: "설명 부분입니다. 해당 내용은 반찬3 입니다.", user: "꼬부맘3", distance: "12km 이내", state: "판매" },
@@ -28,13 +20,20 @@ function Home({ route, navigation }) {
         { id: 7, name: "반찬8", image: "", content: "설명 부분입니다. 해당 내용은 반찬8 입니다.", user: "꼬부맘8", distance: "17km 이내", state: "요청" },
         { id: 8, name: "반찬9", image: "", content: "설명 부분입니다. 해당 내용은 반찬9 입니다.", user: "꼬부맘9", distance: "18km 이내", state: "판매" },
         { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
+    ]);
+
+    const menu = [
+        { num: 0, text: "NOW" },
+        { num: 1, text: "반찬" },
+        { num: 2, text: "베이커리" },
+        { num: 3, text: "식재료" }
     ];
 
+    const [ refresh, setRefresh ] = useState(false);
+    
     function refreshFunc() {
         setRefresh(true);
-        setTimeout(() => {
-            setRefresh(false);
-        }, 1000);
+        setRefresh(false);
     }
 
     function itemClick(obj) {
@@ -77,7 +76,7 @@ function Home({ route, navigation }) {
             {/* list */}
             <SafeAreaView style={homeStyle.list}>
                 <FlatList 
-                    data={example}
+                    data={itemList}
                     renderItem={
                         ({item}) => <Item 
                             id={item.id}

@@ -16,7 +16,7 @@ function Item({ id, name, image, content, user, distance, state, itemClick }) {
                 <View>
                     <Text style={{ color: "gray" }} numberOfLines={1}>{content}</Text>
                 </View>
-                <View style={{ display: "flex", flexDirection: "row", position: "absolute", bottom: 0 }}>
+                <View style={itemStyle.listBotText}>
                     <Text>{user}</Text>
                     <View style={itemStyle.listLine}></View>
                     <Text>{distance}</Text>
@@ -51,6 +51,12 @@ const itemStyle = StyleSheet.create({
         display: "flex", 
         flexDirection: "row", 
         justifyContent: "space-between"
+    },
+    listBotText: {
+        display: "flex", 
+        flexDirection: "row", 
+        position: "absolute", 
+        bottom: 0
     },
     listLine: {
         height: 20, 
