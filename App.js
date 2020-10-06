@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 // import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image,TextInput } from 'react-native';
+import { StyleSheet, View, Image,TextInput } from 'react-native';
 // import axios from 'axios';
 // import socketIO from 'socket.io-client';
 
@@ -20,8 +20,8 @@ import Root from './Root';
 import First from './screen/First';
 
 export default function App() {
-  const [ user, setUser ] = useState(null);
-  const [ socket, setSocket ] = useState(null);
+  const [ user, setUser ] = useState("asd");
+  // const [ socket, setSocket ] = useState(null);
 
   // useEffect(() => {
   //   // storageCheck();
@@ -39,6 +39,11 @@ export default function App() {
       
   //   }
   // }
+
+  useEffect(() => {
+
+  }, [user]);
+
   const searchText='지금 먹고싶은 음식은 무엇인가요?';
   const Header = () => {
     return <View style={styles.HeaderBox}>
@@ -67,7 +72,9 @@ export default function App() {
             />
           </>
           :
-          <Stack.Screen name="First" component={First} options={{ headerShown : false }} />
+          <>
+            <Stack.Screen name="First" component={First} options={{ headerShown : false }} />
+          </>
         }
       </Stack.Navigator>
     </NavigationContainer>

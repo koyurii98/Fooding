@@ -9,13 +9,13 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-package-lock.json
 
 # macOS
 .DS_Store
 
 # env
 environment.js
+google-services.json
 
 # etc
 test.css
