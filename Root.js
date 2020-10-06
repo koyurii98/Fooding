@@ -18,9 +18,9 @@ export default function App() {
                 let iconName;
                 if (route.name === '홈') {
                     iconName = 'ios-home'
-                } else if (route.name === '목록') {
+                } else if (route.name === '구매내역') {
                     iconName = 'ios-cart';
-                } else if (route.name === '결제내역') {
+                } else if (route.name === '신청') {
                     iconName = 'ios-list';
                 } else if (route.name === '메시지') {
                     iconName = 'ios-chatbubbles';
@@ -30,13 +30,13 @@ export default function App() {
                 return <Ionicons name={iconName} size={size} color={color} />
             }})}
                 tabBarOptions={{
-                activeTintColor: 'rgb(255, 126, 66)',
-                inactiveTintColor: 'rgba(82, 82, 82, 0.37)',
+                activeTintColor: '#FF6767',
+                inactiveTintColor: '#A7A7A7',
             }}
         >
             <Tab.Screen name="홈" component={Home} />
-            <Tab.Screen name="목록" component={Board} />
-            <Tab.Screen name="결제내역" component={History} options={{ tabBarBadge: 2 }} />
+            <Tab.Screen name="신청" component={History} options={{ tabBarBadge: 2 }} />
+            <Tab.Screen name="구매내역" component={Board} />
             <Tab.Screen name="메시지" component={Chat} options={{ tabBarBadge: 3 }} />
             <Tab.Screen name="프로필" component={Profile} />
         </Tab.Navigator>

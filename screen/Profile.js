@@ -1,12 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import weIcon from '../assets/we.png';
+import profileNull from '../assets/profile.png';
 function Profile({ route, navigation }) {
     return (
         <View style={profileStyle.container}>
             <View style={profileStyle.profile}>
                 <View style={{ width: "10%" }}>
-                    <View style={profileStyle.profileImage}></View>
+                    <Image source={profileNull} style={profileStyle.profileImage}/>
                 </View>
                 <View style={{ width: "60%" }}>
                     <View style={profileStyle.profileInfo}>
@@ -14,7 +15,7 @@ function Profile({ route, navigation }) {
                         <Text style={{ fontSize: 15 }}>프로필수정</Text>
                     </View>
                     <View style={profileStyle.profileInfoSub}>
-                        <View style={profileStyle.profileInfoIcon}></View>
+                        <Image style={profileStyle.profileInfoIcon} source={weIcon}/>
                         <Text>서울 특별시 00구</Text>
                     </View>
                 </View>
@@ -50,7 +51,8 @@ const profileStyle = StyleSheet.create({
     // container
     container: {
         flex: 1, 
-        backgroundColor: "white"
+        backgroundColor: "white",
+        color:"#707070",
     },
 
     // profile
@@ -65,7 +67,6 @@ const profileStyle = StyleSheet.create({
     profileImage: {
         width: 85, 
         height: 85, 
-        backgroundColor: "gray", 
         borderRadius: 50
     },
     profileInfo: {
@@ -87,7 +88,6 @@ const profileStyle = StyleSheet.create({
     profileInfoIcon: {
         width: 13, 
         height: 18, 
-        backgroundColor: "red",
         marginRight: 4
     },
 
@@ -106,7 +106,8 @@ const profileStyle = StyleSheet.create({
     },
     historyNum: {
         fontSize: 20, 
-        color: "#ff6767"
+        color: "#ff6767",
+        fontWeight:"700",
     },
 
     // title 
