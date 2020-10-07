@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-function Item({ id, name, image, content, user, distance, state, itemClick }) {
+function Item(props) {
+    const { id, name, image, content, user, distance, state, itemClick } = props;
     const obj = { id, name, content, user, distance, state };
         return <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(obj)}>
             <Image 

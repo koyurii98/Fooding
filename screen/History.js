@@ -1,13 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import Login from './Login';
+// import React from 'react';
+// import { StyleSheet, Text, View, Button } from 'react-native';
 
-function History({ route, navigation }) {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems:"center" }}>
-            <Login/>
-        </View>
-    );
-}
+// function History({ route, navigation }) {
+//     return (
+//         <View style={{ flex: 1, justifyContent: 'center', alignItems:"center" }}>
+//         </View>
+//     );
+// }
 
-export default History;
+// export default History;
