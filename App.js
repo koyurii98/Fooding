@@ -24,6 +24,8 @@ import ChatListRoom from './scenes/chatlist/ChatListRoom';
 import Profile from './scenes/profile/Profile';
 import ProfileEdit from './scenes/profile/ProfileEdit';
 import ProfileHistory from './scenes/profile/ProfileHistory';
+import ProfileHeader from './component/header/ProfileHeader';
+import HistoryHeader from './component/header/HistoryHeader';
 
 const AppStack = createStackNavigator();
 
@@ -74,11 +76,25 @@ function ProfileTab() {
         headerStyle: {
           height: 90
         },
-        headerTitle: props => <Header {...props} /> 
+        headerTitle: props => <Header {...props} /> ,
       }} 
     />
-    <ProfileTabStack.Screen name="ProfileEdit" component={ProfileEdit} options={{ headerShown: true }} />
-    <ProfileTabStack.Screen name="ProfileHistory" component={ProfileHistory} options={{ headerShown: true }} />
+    <ProfileTabStack.Screen name="ProfileEdit" component={ProfileEdit} options={{ 
+      headerShown: true,
+      headerTitle:props=><ProfileHeader {...props}/>, 
+      headerLeft: null,  
+      headerStyle: {
+          height: 90
+        },
+      }} />
+    <ProfileTabStack.Screen name="ProfileHistory" component={ProfileHistory} options={{
+      headerShown: true,
+      headerTitle:props=><HistoryHeader {...props}/>,
+      headerLeft:null,
+      headerStyle:{
+        height:90
+        },
+      }} />
   </ProfileTabStack.Navigator>
 }
 

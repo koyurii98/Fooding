@@ -28,6 +28,7 @@ LodingBox:{
     flexDirection:"column",
     justifyContent:"space-around",
     alignItems:"center",
+    color:"#9a9a9a",
 },
 LoadingLogo:{
     resizeMode:"contain",

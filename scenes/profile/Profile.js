@@ -74,9 +74,11 @@ function Profile(props) {
                 </View>
             </TouchableOpacity>
             <View style={profileStyle.profileBanner}>
-                <Image source={profileBanner} style={{position:"absolute",resizeMode:"cover",width:"100%",bottom:0,}}/>
+                <Image source={profileBanner} style={{position:"absolute",resizeMode:"cover",width:"100%",}}/>
                 <TouchableOpacity onPress={()=>console.log("친구초대")}>
-                    <Image source={profileBannerBtn} style={{marginTop:100,marginLeft:15}} />
+                    <View style={profileStyle.bannerBtn} >
+                        <Text style={{color:"#ff7575",fontSize:16,fontWeight:"bold"}}>친구초대</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         </View>
@@ -136,7 +138,7 @@ const profileStyle = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        height: 60,
+        height: 65,
         borderBottomWidth: 0.7,
         borderColor:"#d2d2d2",
     },
@@ -158,25 +160,38 @@ const profileStyle = StyleSheet.create({
     },
 
     menu: {
-        height: 66,
+        height: 70,
         borderBottomWidth: 0.7,
         borderColor:"#d2d2d2",
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between",
+        color:"#636363",
     },
     arrowIcon:{
         marginRight:15,
     },
     settingIcon:{
         resizeMode:"contain",
-        width:25,
+        width:20,
+        height:20,
     },
     profileBanner:{
         justifyContent:"center",
         width:"100%",
         display:"flex",
         height:"38%",
+    },
+    bannerBtn:{
+        width: 174,
+        height: 43,
+        backgroundColor:"#ffffff",
+        borderRadius:20,
+        textAlign:"center",
+        justifyContent:"center",
+        alignItems:"center",
+        marginTop:80,
+        marginLeft:10,
     }
 });
 
