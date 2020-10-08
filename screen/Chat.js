@@ -1,9 +1,7 @@
 // import React, { useState, useEffect } from 'react';
 // import { StyleSheet,FlatList,SafeAreaView,View,Image,Text} from 'react-native';
 // import { createStackNavigator } from '@react-navigation/stack';
-// import Chatting from './Chatting';
 // import ChatItem from  '../component/ChatItem';
-// import ChatHeader from '../component/ChatHeader';
 
 // const ChatStack = createStackNavigator();
 
@@ -56,14 +54,6 @@
 // 			<ChatStack.Screen 
 // 				name="Chat" 
 // 				component={Chat} />
-// 			<ChatStack.Screen
-// 				name="Chatting"
-// 				component={Chatting}
-// 				options={{
-// 					headerShown:true,
-// 					headerLeft:false,
-// 					headerTitle: props => <ChatHeader navigation={navigation} {...props}/>
-// 				}} />
 // 		</ChatStack.Navigator>
 // 	);
 // }

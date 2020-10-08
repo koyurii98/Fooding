@@ -1,39 +1,71 @@
-// import React from 'react';
-// import {StyleSheet,TouchableOpacity,Text} from 'react-native';
-// import {ListItem, Left, Body, Right, Thumbnail } from 'native-base';
-// import profileNull from '../assets/profile.png';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import { ListItem, Left, Body, Right, Thumbnail } from 'native-base';
+import moment from 'moment';
+moment.locale("ko");
 
-// function ChatItem({ id, userName, profile, chatText, time,ChatClick}) {
-//   const obj = { id, userName, profile, chatText, time};
-//   return<TouchableOpacity style={chatItemStyles.view}>
-//       <ListItem avatar style={chatItemStyles.List} onPress={() => ChatClick(obj)}>
-//         <Left style={{height:80}}>
-//           <Thumbnail source={profile||profileNull} />
-//         </Left>
-//         <Body style={{height:80}}>
-//           <Text style={chatItemStyles.name}>{userName}</Text>
-//           <Text>{chatText}</Text>
-//         </Body>
-//         <Right style={{height:80}}>
-//           <Text style={{color:"#afafaf"}}>{time}</Text>
-//         </Right>
-//       </ListItem>
-//     </TouchableOpacity>
-//     }
-// const chatItemStyles = StyleSheet.create({
-//   view:{
-//     margin:0,
-//     backgroundColor:"white",
-//     color:"#707070",
-//     height:80,
-//   },
-//   List:{
-//     height:80,
-//   },
-//   name:{
-//     fontSize:16,
-//     fontWeight:"700",
-//   }
-// })
+function ChatItem(props) {
+  const { id, name, image, address, text, time, listClick } = props;
 
-// export default ChatItem;
+  return <TouchableOpacity style={chatItemStyle.container} onPress={() => listClick(id, name)}>
+        <View style={chatItemStyle.box}>
+            <Thumbnail source={image || require("../assets/profile.png")} />
+            <View style={chatItemStyle.leftView}>
+                <View style={chatItemStyle.leftLayout}>
+                    <Text style={chatItemStyle.nameText}>{name}</Text>
+                    <Text style={chatItemStyle.addressText}>{address}</Text>
+                </View>
+                <View>
+                    <Text numberOfLines={1}>{text}</Text>
+                </View>
+                <View>
+                    <Text 
+                        numberOfLines={1}
+                        style={{ fontSize: 11, color: "gray" }}
+                    >
+                        {moment(time).format("YYYY년 MM월 DD일 HH시 mm분")}
+                    </Text>
+                </View>
+            </View>
+        </View>
+    </TouchableOpacity>
+    }
+const chatItemStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor:"white",
+    },
+    box: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        height: 100,
+        padding: 15,
+        borderBottomWidth: 0.2,
+        borderColor: "gray",
+    },
+
+    leftView: {
+        width: "80%",
+        marginLeft: 15,
+        marginRight: 10,
+    },
+    leftLayout: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 5
+    },
+
+    nameText: {
+        fontSize: 15,
+        fontWeight: "700",
+        marginRight: 10,
+    },
+    addressText: {
+        fontSize: 12, 
+        color: "gray",
+    }
+})
+
+export default ChatItem;
