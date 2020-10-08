@@ -156,7 +156,8 @@ const profileStyle = StyleSheet.create({
     titleText: {
         fontSize: 20, 
         fontWeight: "bold", 
-        margin: 15
+        margin: 15,
+        color:"#636363",
     },
 
     menu: {
@@ -166,7 +167,6 @@ const profileStyle = StyleSheet.create({
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between",
-        color:"#636363",
     },
     arrowIcon:{
         marginRight:15,

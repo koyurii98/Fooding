@@ -103,6 +103,7 @@ function Home(props) {
                     contentContainerStyle={{ paddingBottom: 336 }}
                     refreshing={refresh}
                     onRefresh={refreshFunc}
+                    style={homeStyle.listView}
                 />
             </SafeAreaView>
         </View>
