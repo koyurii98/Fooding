@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Alert, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Alert, Image } from 'react-native';
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -24,6 +24,8 @@ import ChatListRoom from './scenes/chatlist/ChatListRoom';
 import Profile from './scenes/profile/Profile';
 import ProfileEdit from './scenes/profile/ProfileEdit';
 import ProfileHistory from './scenes/profile/ProfileHistory';
+import ProfileHeader from './component/header/ProfileHeader';
+import HistoryHeader from './component/header/HistoryHeader';
 
 const AppStack = createStackNavigator();
 
@@ -108,28 +110,48 @@ function App() {
         }} 
         initialParams={{ user }}
       />
-      <ProfileTabStack.Screen name="ProfileEdit" component={ProfileEdit} options={{ headerShown: true }} />
-      <ProfileTabStack.Screen name="ProfileHistory" component={ProfileHistory} options={{ headerShown: true }} />
+      <ProfileTabStack.Screen name="ProfileEdit" component={ProfileEdit} options={{ 
+        headerShown: true,
+        header: ({ navigation }) => {
+          return <ProfileHeader navigation={navigation} />
+        },
+        headerLeft: null,  
+        headerStyle: {
+            height: 90
+          },
+        }} 
+      />
+      <ProfileTabStack.Screen name="ProfileHistory" component={ProfileHistory} options={{
+        headerShown: true,
+        header: ({ navigation }) => {
+          return <HistoryHeader navigation={navigation} />
+        },
+        headerLeft: null,
+        headerStyle: {
+          height: 90
+          },
+        }} 
+      />
     </ProfileTabStack.Navigator>
   }
 
   function Tab() {
     return <TabNavigator.Navigator 
       backBehavior="initialRoute" 
-      initialRouteName="Home" 
-      screenOptions={({ route, navigation }) => ({
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === 'Home') {
-            iconName = focused ? "A!" : "A..";
-          } else if (route.name === 'Store') {
-            iconName = focused ? "B!" : "B..";
-          } else if (route.name === 'ChatList') {
-            iconName = focused ? "C!" : "C..";
-          } else if (route.name === 'Profile') {
-            iconName = focused ? "D!" : "D..";
+          if (route.name === "Home") {
+            iconName = focused ? require('./assets/Menu/home-c.png') : require('./assets/Menu/home-g.png');
+          } else if (route.name === "Store") {
+            iconName = focused ?require('./assets/Menu/list-c.png') : require('./assets/Menu/list-g.png');
+          } else if (route.name === "ChatList") {
+            iconName = focused ? require('./assets/Menu/chat-c.png') : require('./assets/Menu/chat-g.png');
+          } else if (route.name === "Profile") {
+            iconName = focused ? require('./assets/Menu/mypage-c.png') : require('./assets/Menu/mypage-g.png');
           }
-          return <Text style={tabStyle.icon}>{iconName}</Text>;
+          return <Image source={iconName} style={tabStyle.icon}/>;
         },
       })}
       tabBarOptions={{
@@ -137,9 +159,9 @@ function App() {
         inactiveTintColor: 'gray',
       }}
     >
-      <TabNavigator.Screen name="Home" component={HomeTab} />
-      <TabNavigator.Screen name="Store" component={StoreTab} />
-      <TabNavigator.Screen name="ChatList" component={ChatListTab} 
+      <TabNavigator.Screen name="Home" component={HomeTab} options={{ title : "홈" }} />
+      <TabNavigator.Screen name="Store" component={StoreTab} options={{ title : "스토어" }} />
+      <TabNavigator.Screen name="ChatList" component={ChatListTab} options={{ title : "채팅" }} 
         listeners={({ navigation }) => ({
           tabPress: e => {
             if(!user) {
@@ -152,7 +174,7 @@ function App() {
           }
         })}
       />
-      <TabNavigator.Screen name="Profile" component={ProfileTab} 
+      <TabNavigator.Screen name="Profile" component={ProfileTab} options={{ title : "마이페이지" }}
         listeners={({ navigation }) => ({
             tabPress: e => {
               if(!user) {
@@ -193,8 +215,10 @@ function App() {
 
 const tabStyle = StyleSheet.create({
   icon: {
-
-  },
+    resizeMode:"contain",
+    width:"65%",
+    height:"65%",
+  }
 });
 
 export default App;

@@ -17,7 +17,7 @@ function First(props) {
     return (
         <View style={styles.LodingBox} >
             <Image style={styles.LoadingLogo} source={require("../assets/Loading-Logo.png")} />
-            <Text>v 0.0.1</Text>
+            <Text style={{color:"#7e7e7e"}}>v 0.0.1</Text>
         </View>
     );
 }

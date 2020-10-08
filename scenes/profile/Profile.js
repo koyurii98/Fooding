@@ -1,7 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity, ScrollView } from 'react-native';
+
+
 import weIcon from '../../assets/we.png';
 import profileNull from '../../assets/profile.png';
+import profileBanner from '../../assets/profile_banner.png';
+import RightArrow from '../../assets/right_arrow.png';
+import settingBtn from '../../assets/setting_btn.png';
+import profileBannerBtn from '../../assets/profile_banner_btn.png';
 
 function Profile(props) {
     return (
@@ -10,11 +16,14 @@ function Profile(props) {
                 <View style={{ }}>
                     <Image source={profileNull} style={profileStyle.profileImage}/>
                 </View>
-                <View style={{ width: "60%" }}>
+                <View style={{ width: "65%",margin:0,}}>
                     <View style={profileStyle.profileInfo}>
                         <Text style={profileStyle.profileInfoName}>꼬부맘</Text>
                         <TouchableOpacity onPress={() => props.navigation.navigate("ProfileEdit", {  })}>
-                            <Text style={{ fontSize: 15 }}>프로필수정</Text>
+                            <View style={{justifyContent:"space-between",flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{ fontSize: 14 }}>프로필수정</Text>
+                                <Image source={settingBtn} style={{resizeMode:"contain",width:20,margin:5}}/>
+                            </View>
                         </TouchableOpacity>
                     </View>
                     <View style={profileStyle.profileInfoSub}>
@@ -46,22 +55,34 @@ function Profile(props) {
                     </View>
                 </TouchableOpacity>
             </View>
-
-            <View style={profileStyle.menu}>
-                <Text style={profileStyle.titleText}>공지사항</Text>
-            </View>
-
-            <View style={profileStyle.menu}>
-                <Text style={profileStyle.titleText}>이벤트</Text>
-            </View>
-
-            <View style={profileStyle.menu}>
-                <Text style={profileStyle.titleText}>고객센터</Text>
-            </View>
-
-            <View>
-                <Text>배너 라인</Text>
-            </View>
+            <ScrollView>
+                <TouchableOpacity onPress={()=>console.log("공지사항")}>
+                    <View style={profileStyle.menu}>
+                        <Text style={profileStyle.titleText}>공지사항</Text>
+                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>console.log("이벤트")}>
+                    <View style={profileStyle.menu}>
+                        <Text style={profileStyle.titleText}>이벤트</Text>
+                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>console.log("고객센터")}>
+                    <View style={profileStyle.menu}>
+                        <Text style={profileStyle.titleText}>고객센터</Text>
+                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                    </View>
+                </TouchableOpacity>
+                <View style={profileStyle.profileBanner}>
+                    <Image source={profileBanner} style={{position:"absolute",resizeMode:"cover",width:"100%",}}/>
+                    <TouchableOpacity onPress={()=>console.log("친구초대")}>
+                        <View style={profileStyle.bannerBtn} >
+                            <Text style={{color:"#ff7575",fontSize:16,fontWeight:"bold"}}>친구초대</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -79,9 +100,11 @@ const profileStyle = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-around",
-        alignItems: "center",
-        height: 115,
-        borderBottomWidth: 0.2
+        height: "20%",
+        width:"100%",
+        alignItems:"center",
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
     },
     profileImage: {
         width: 85, 
@@ -93,20 +116,21 @@ const profileStyle = StyleSheet.create({
         flexDirection: "row", 
         justifyContent: "space-between", 
         alignItems: "center", 
-        marginBottom: 6
+        marginBottom: 6,
+        height:"40%",
     },
     profileInfoName: {
         fontSize: 20, 
         fontWeight: "bold"
     },
     profileInfoSub: {
-        display: "flex", 
         flexDirection: "row", 
-        alignItems: "center"
+        display:"flex",
+        alignItems:"center",
+        marginTop:-10,
     },
     profileInfoIcon: {
         width: 13, 
-        height: 18, 
         marginRight: 4
     },
 
@@ -116,8 +140,9 @@ const profileStyle = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        height: 71,
-        borderBottomWidth: 0.2
+        height: 65,
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
     },
     historyLayout: {
         display: "flex", 
@@ -133,12 +158,42 @@ const profileStyle = StyleSheet.create({
     titleText: {
         fontSize: 20, 
         fontWeight: "bold", 
-        margin: 15
+        margin: 15,
+        color:"#636363",
     },
 
     menu: {
-        height: 114,
-        borderBottomWidth: 0.2
+        height: 80,
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-between",
+    },
+    arrowIcon:{
+        marginRight:15,
+    },
+    settingIcon:{
+        resizeMode:"contain",
+        width:20,
+        height:20,
+    },
+    profileBanner:{
+        justifyContent:"center",
+        width:" 100%",
+        display: "flex",
+        height: 220,
+    },
+    bannerBtn:{
+        width: 174,
+        height: 43,
+        backgroundColor:"#ffffff",
+        borderRadius:20,
+        textAlign:"center",
+        justifyContent:"center",
+        alignItems:"center",
+        marginTop:80,
+        marginLeft:10,
     }
 });
 

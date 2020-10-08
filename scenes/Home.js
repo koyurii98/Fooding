@@ -103,6 +103,7 @@ function Home(props) {
                     contentContainerStyle={{ paddingBottom: 336 }}
                     refreshing={refresh}
                     onRefresh={refreshFunc}
+                    style={homeStyle.listView}
                 />
             </SafeAreaView>
         </View>
@@ -116,7 +117,6 @@ const homeStyle = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "flex-end",
-        backgroundColor: "#e9aaff",
         height: 123,
         position: "relative"
     },

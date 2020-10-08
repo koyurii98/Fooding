@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {Card} from 'native-base';
 
 function Item(props) {
     const { id, name, image, content, user, distance, state, itemClick } = props;
     const obj = { id, name, content, user, distance, state };
-        return <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(obj)}>
+        return <Card style={itemStyle.listCard}>
+            <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(obj)}>
             <Image 
                 style={itemStyle.listImage}
                 source={image || require("../assets/example.png")}
@@ -24,17 +26,19 @@ function Item(props) {
                 </View>
             </View>
         </TouchableOpacity>
+    </Card>
 }
 
 const itemStyle = StyleSheet.create({
+    listCard:{
+        width:"99%",
+    },
     // list
     listBox: {
         display: "flex", 
         flexDirection: "row", 
-        borderBottomWidth: 0.2,
-        borderColor: "gray", 
         padding: 15,
-        margin: 10
+        margin: 5,
     },
     listImage: {
         height: 100,
