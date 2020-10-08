@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import Logo from '../assets/Loading-Logo.png';
+import { useIsFocused  } from '@react-navigation/native'
+import axios from 'axios';
 
 function First(props) {
+    const isFocused = useIsFocused()
 
     useEffect(() => {
+        // first server data request .. and navigate code ..
+        
         setTimeout(() => {
             props.navigation.navigate("Tab");
         }, 500);
-    }, []);
+    }, [isFocused]);
 
     return (
         <View style={styles.LodingBox} >
-            <Image style={styles.LoadingLogo} source={Logo} />
+            <Image style={styles.LoadingLogo} source={require("../assets/Loading-Logo.png")} />
             <Text>v 0.0.1</Text>
         </View>
     );
