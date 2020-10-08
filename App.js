@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Alert } from 'react-native';
+import { StyleSheet, Text, Alert,Image } from 'react-native';
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -85,20 +85,20 @@ function ProfileTab() {
 function Tab() {
   return <TabNavigator.Navigator 
     backBehavior="initialRoute" 
-    initialRouteName="Home" 
+    initialRouteName="Home"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        if (route.name === 'Home') {
-          iconName = focused ? "A!" : "A..";
-        } else if (route.name === 'Store') {
-          iconName = focused ? "B!" : "B..";
-        } else if (route.name === 'ChatList') {
-          iconName = focused ? "C!" : "C..";
-        } else if (route.name === 'Profile') {
-          iconName = focused ? "D!" : "D..";
+        if (route.name === '홈') {
+          iconName = focused ? require('./assets/Menu/home-c.png') : require('./assets/Menu/home-g.png');
+        } else if (route.name === '신청') {
+          iconName = focused ?require('./assets/Menu/list-c.png') : require('./assets/Menu/list-g.png');
+        } else if (route.name === '채팅') {
+          iconName = focused ? require('./assets/Menu/chat-c.png') : require('./assets/Menu/chat-g.png');
+        } else if (route.name === '마이페이지') {
+          iconName = focused ? require('./assets/Menu/mypage-c.png') : require('./assets/Menu/mypage-g.png');
         }
-        return <Text style={tabStyle.icon}>{iconName}</Text>;
+        return <Image source={iconName} style={tabStyle.icon}/>;
       },
     })}
     tabBarOptions={{
@@ -106,10 +106,10 @@ function Tab() {
       inactiveTintColor: 'gray',
     }}
   >
-    <TabNavigator.Screen name="Home" component={HomeTab} />
-    <TabNavigator.Screen name="Store" component={StoreTab} />
-    <TabNavigator.Screen name="ChatList" component={ChatListTab} />
-    <TabNavigator.Screen name="Profile" component={ProfileTab} />
+    <TabNavigator.Screen name="홈" component={HomeTab} />
+    <TabNavigator.Screen name="신청" component={StoreTab} />
+    <TabNavigator.Screen name="채팅" component={ChatListTab} />
+    <TabNavigator.Screen name="마이페이지" component={ProfileTab} />
   </TabNavigator.Navigator>
 }
 
@@ -154,7 +154,9 @@ function App() {
 
 const tabStyle = StyleSheet.create({
   icon: {
-
+    resizeMode:"contain",
+    width:"65%",
+    height:"65%",
   }
 });
 

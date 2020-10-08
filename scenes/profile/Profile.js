@@ -7,81 +7,79 @@ import profileNull from '../../assets/profile.png';
 import profileBanner from '../../assets/profile_banner.png';
 import RightArrow from '../../assets/right_arrow.png';
 import settingBtn from '../../assets/setting_btn.png';
+import profileBannerBtn from '../../assets/profile_banner_btn.png';
 
 function Profile(props) {
     return (
-       
-            <View style={profileStyle.container}>
-                 <ScrollView>
-                <View style={profileStyle.profile}>
-                    <View style={{ }}>
-                        <Image source={profileNull} style={profileStyle.profileImage}/>
+        <View style={profileStyle.container}>
+            <View style={profileStyle.profile}>
+                <View style={{ }}>
+                    <Image source={profileNull} style={profileStyle.profileImage}/>
+                </View>
+                <View style={{ width: "65%",margin:0,}}>
+                    <View style={profileStyle.profileInfo}>
+                        <Text style={profileStyle.profileInfoName}>꼬부맘</Text>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("ProfileEdit", {  })}>
+                            <View style={{justifyContent:"space-between",flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{ fontSize: 14 }}>프로필수정</Text>
+                                <Image source={settingBtn} style={{resizeMode:"contain",width:20,margin:5}}/>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ width: "60%",flexDirection:"column",justifyContent:"center",height:20}}>
-                        <View style={profileStyle.profileInfo}>
-                            <Text style={profileStyle.profileInfoName}>꼬부맘</Text>
-                            <TouchableOpacity onPress={() => props.navigation.navigate("ProfileEdit", {  })}>
-                                <View style={{justifyContent:"space-between",flexDirection:"row",alignItems:"center"}}>
-                                    <Text style={{ fontSize: 14 }}>프로필수정</Text>
-                                    <Image source={settingBtn} style={{resizeMode:"contain",width:20,margin:5}}/>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={profileStyle.profileInfoSub}>
-                            <Image style={profileStyle.profileInfoIcon} source={weIcon}/>
-                            <Text>서울 특별시 00구</Text>
-                        </View>
+                    <View style={profileStyle.profileInfoSub}>
+                        <Image style={profileStyle.profileInfoIcon} source={weIcon}/>
+                        <Text>서울 특별시 00구</Text>
                     </View>
                 </View>
-
-                <View style={profileStyle.history}>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
-                        <View style={profileStyle.historyLayout}>
-                            <Text style={profileStyle.historyNum}>{0}</Text>
-                            <Text>판매</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
-                        <View style={profileStyle.historyLayout}>
-                            <Text style={profileStyle.historyNum}>{15}</Text>
-                            <Text>요청</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
-                        <View style={profileStyle.historyLayout}>
-                            <Text style={profileStyle.historyNum}>{4}</Text>
-                            <Text>구매</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity onPress={()=>console.log("공지사항")}>
-                    <View style={profileStyle.menu}>
-                        <Text style={profileStyle.titleText}>공지사항</Text>
-                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>console.log("공지사항")}>
-                    <View style={profileStyle.menu}>
-                        <Text style={profileStyle.titleText}>이벤트</Text>
-                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={profileStyle.menu}>
-                        <Text style={profileStyle.titleText}>고객센터</Text>
-                        <Image source={RightArrow} style={profileStyle.arrowIcon}/>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View>
-                    <Image source={profileBanner}/>
-                    <Image source={RightArrow} style={profileStyle.arrowIcon}/>
-                    </View>
-                </TouchableOpacity>
-                </ScrollView>
             </View>
+
+            <View style={profileStyle.history}>
+                <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
+                    <View style={profileStyle.historyLayout}>
+                        <Text style={profileStyle.historyNum}>{0}</Text>
+                        <Text>판매</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
+                    <View style={profileStyle.historyLayout}>
+                        <Text style={profileStyle.historyNum}>{15}</Text>
+                        <Text>요청</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
+                    <View style={profileStyle.historyLayout}>
+                        <Text style={profileStyle.historyNum}>{4}</Text>
+                        <Text>구매</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={()=>console.log("공지사항")}>
+                <View style={profileStyle.menu}>
+                    <Text style={profileStyle.titleText}>공지사항</Text>
+                    <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>console.log("이벤트")}>
+                <View style={profileStyle.menu}>
+                    <Text style={profileStyle.titleText}>이벤트</Text>
+                    <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>console.log("고객센터")}>
+                <View style={profileStyle.menu}>
+                    <Text style={profileStyle.titleText}>고객센터</Text>
+                    <Image source={RightArrow} style={profileStyle.arrowIcon}/>
+                </View>
+            </TouchableOpacity>
+            <View style={profileStyle.profileBanner}>
+                <Image source={profileBanner} style={{position:"absolute",resizeMode:"cover",width:"100%",bottom:0,}}/>
+                <TouchableOpacity onPress={()=>console.log("친구초대")}>
+                    <Image source={profileBannerBtn} style={{marginTop:100,marginLeft:15}} />
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 }
 
@@ -98,9 +96,11 @@ const profileStyle = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-around",
-        alignItems: "center",
-        height: 115,
-        borderBottomWidth: 0.2
+        height: "20%",
+        width:"100%",
+        alignItems:"center",
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
     },
     profileImage: {
         width: 85, 
@@ -112,7 +112,8 @@ const profileStyle = StyleSheet.create({
         flexDirection: "row", 
         justifyContent: "space-between", 
         alignItems: "center", 
-        marginBottom: 6
+        marginBottom: 6,
+        height:"40%",
     },
     profileInfoName: {
         fontSize: 20, 
@@ -120,10 +121,12 @@ const profileStyle = StyleSheet.create({
     },
     profileInfoSub: {
         flexDirection: "row", 
+        display:"flex",
+        alignItems:"center",
+        marginTop:-10,
     },
     profileInfoIcon: {
         width: 13, 
-        height: 18, 
         marginRight: 4
     },
 
@@ -133,8 +136,9 @@ const profileStyle = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        height: 71,
-        borderBottomWidth: 0.2
+        height: 60,
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
     },
     historyLayout: {
         display: "flex", 
@@ -154,8 +158,9 @@ const profileStyle = StyleSheet.create({
     },
 
     menu: {
-        height: 60,
-        borderBottomWidth: 0.2,
+        height: 66,
+        borderBottomWidth: 0.7,
+        borderColor:"#d2d2d2",
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between",
@@ -166,6 +171,12 @@ const profileStyle = StyleSheet.create({
     settingIcon:{
         resizeMode:"contain",
         width:25,
+    },
+    profileBanner:{
+        justifyContent:"center",
+        width:"100%",
+        display:"flex",
+        height:"38%",
     }
 });
 
