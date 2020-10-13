@@ -1,29 +1,33 @@
 import React from 'react';
 import { View,Text,StyleSheet,Image,TouchableOpacity } from 'react-native';
 
-
-function ProfileHeader(props) {
+function WriteHeader(props) {
   return (
-  <View style={profileHeaderStyle.Header}>
+    <View style={WriteHeaderStyle.Header}>
     <TouchableOpacity onPress={() => props.navigation.goBack()}>
       <Image 
         style={{ marginLeft: 15 }}
         source={require('../../assets/retrun.png')}
       />
     </TouchableOpacity>
-    <Text style={profileHeaderStyle.edit}>프로필수정</Text>
-    <TouchableOpacity onPress={() => console.log("저장")}>
-      <Text style={profileHeaderStyle.save}>저장</Text>
+    <Text style={WriteHeaderStyle.edit}>글쓰기</Text>
+    <TouchableOpacity onPress={() => console.log("올리기")}>
+      <Text style={WriteHeaderStyle.save}>올리기</Text>
     </TouchableOpacity>
   </View>
   );
 }
-const profileHeaderStyle = StyleSheet.create({
+
+const WriteHeaderStyle = StyleSheet.create({
   Header:{
     justifyContent:"space-between",
     flexDirection:"row",
     alignItems:"center",
     backgroundColor: "white",
+    paddingTop: 45,
+    paddingBottom: 15,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "gray"
   },
   edit: {
     fontSize:21,
@@ -38,4 +42,4 @@ const profileHeaderStyle = StyleSheet.create({
     marginRight: 15
   }
 })
-export default ProfileHeader;
+export default WriteHeader;

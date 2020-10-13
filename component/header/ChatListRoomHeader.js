@@ -35,7 +35,7 @@ const headerStyle = StyleSheet.create({
         zIndex: 50
     },
     headerTitleText: {
-      fontSize: 24,
+      fontSize: 21,
       fontWeight: "600"
     },
     backImage: {
