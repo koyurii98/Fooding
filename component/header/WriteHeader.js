@@ -26,8 +26,6 @@ const WriteHeaderStyle = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: 45,
     paddingBottom: 15,
-    borderBottomWidth: 0.2,
-    borderBottomColor: "gray"
   },
   edit: {
     fontSize:21,

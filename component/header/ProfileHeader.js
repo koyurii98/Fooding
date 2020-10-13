@@ -24,6 +24,7 @@ const profileHeaderStyle = StyleSheet.create({
     flexDirection:"row",
     alignItems:"center",
     backgroundColor: "white",
+    paddingTop: 45,
   },
   edit: {
     fontSize:21,
