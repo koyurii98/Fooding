@@ -41,10 +41,11 @@ function Login(props) {
         <View style={loginStyle.container}>
             <Image
                 source={require("../../assets/Loading-Logo.png")}
+                style={{marginTop:30}}
             />
             <Image 
                 style={loginStyle.img}
-                source={require("../../assets/Login/groceries.png")}
+                source={require("../../assets/Login/product.png")}
             />
             <Text style={loginStyle.title}>푸딩에서 먹고 싶은 음식을 찾아보세요!</Text>
             <TouchableOpacity onPress={() => console.log("K")}>
@@ -102,7 +103,7 @@ const loginStyle = StyleSheet.create({
     back: {
         marginTop: 20,
         fontSize: 12,
-        color: "#bbbbbb",
+        color: "#5e5e5e",
         textAlign: "center"
     }
 });

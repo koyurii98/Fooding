@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-import { ListItem, Left, Body, Right, Thumbnail } from 'native-base';
+import { Thumbnail } from 'native-base';
 import moment from 'moment';
 moment.locale("ko");
 

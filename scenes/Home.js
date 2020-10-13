@@ -1,45 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView, BackHandler, Alert } from 'react-native';
+import { StyleSheet,View, Image, BackHandler, Alert,Text, ScrollView, TouchableOpacity } from 'react-native';
+import {Card} from 'native-base';
 
-import Item from '../component/Item';
 
 function Home(props) {
-    const [ menuBorder, setMenuBorder ] = useState(0); 
-    const [ itemList, setItemmList ] = useState([
-        { id: 0, name: "반찬1", image: "", content: "설명 부분입니다. 해당 내용은 반찬1 입니다.", user: "꼬부맘1", distance: "10km 이내", state: "판매" },
-        { id: 1, name: "반찬2", image: "", content: "설명 부분입니다. 해당 내용은 반찬2 입니다.", user: "꼬부맘2", distance: "11km 이내", state: "요청" },
-        { id: 2, name: "반찬3", image: "", content: "설명 부분입니다. 해당 내용은 반찬3 입니다.", user: "꼬부맘3", distance: "12km 이내", state: "판매" },
-        { id: 3, name: "반찬4", image: "", content: "설명 부분입니다. 해당 내용은 반찬4 입니다.", user: "꼬부맘4", distance: "13km 이내", state: "요청" },
-        { id: 4, name: "반찬5", image: "", content: "설명 부분입니다. 해당 내용은 반찬5 입니다.", user: "꼬부맘5", distance: "14km 이내", state: "판매" },
-        { id: 5, name: "반찬6", image: "", content: "설명 부분입니다. 해당 내용은 반찬6 입니다.", user: "꼬부맘6", distance: "15km 이내", state: "판매" },
-        { id: 6, name: "반찬7", image: "", content: "설명 부분입니다. 해당 내용은 반찬7 입니다.", user: "꼬부맘7", distance: "16km 이내", state: "요청" },
-        { id: 7, name: "반찬8", image: "", content: "설명 부분입니다. 해당 내용은 반찬8 입니다.", user: "꼬부맘8", distance: "17km 이내", state: "요청" },
-        { id: 8, name: "반찬9", image: "", content: "설명 부분입니다. 해당 내용은 반찬9 입니다.", user: "꼬부맘9", distance: "18km 이내", state: "판매" },
-        { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
-    ]);
-
-    const menu = [
-        { num: 0, text: "판매" },
-        { num: 1, text: "요청" },
-    ];
-
-    const [ refresh, setRefresh ] = useState(false);
-    
-    function refreshFunc() {
-        setRefresh(true);
-        console.log("refresh !");
-        setRefresh(false);
-    }
-
-    function itemClick(obj) {
-        props.navigation.navigate("Detail", obj);
-    }
-
-    function menuClick(num) {
-        console.log("menu click", num)
-        setMenuBorder(num);
-    }
-
     const backAction = () => {
         Alert.alert("확인", "종료 하시겠습니까?", [
             { text: "취소", onPress: () => null, style: "cancel" }, 
@@ -47,70 +11,158 @@ function Home(props) {
         ]);
         return true;
     };
-
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", backAction);
         return () => {
             BackHandler.removeEventListener("hardwareBackPress", backAction);
         }
-    }, [itemList]);
-
+    });
     return (
-        <View>
-            {/* banner */}
-            <View style={homeStyle.banner}>
-                <Image source={require("../assets/Banner.png")} />
-            </View>
+        <ScrollView>
+            <View style={homeStyle.homebox}>
+                {/* cate */}
+                <View style={homeStyle.cate}>
+                    <TouchableOpacity style={homeStyle.imgBox}>
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/apple.png')}/>
+                        <Text style={homeStyle.cateTtile}>과일</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={homeStyle.imgBox}>
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/gocu.png')}/>
+                        <Text style={homeStyle.cateTtile}>채소</Text>
+                    </TouchableOpacity>  
+                    <TouchableOpacity style={homeStyle.imgBox}>  
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/fish.png')}/>
+                        <Text style={homeStyle.cateTtile}>해산물</Text>
+                    </TouchableOpacity>   
+                    <TouchableOpacity style={homeStyle.imgBox}> 
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/meet.png')}/>
+                        <Text style={homeStyle.cateTtile}>육류</Text>
+                    </TouchableOpacity>  
+                    <TouchableOpacity style={homeStyle.imgBox}> 
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/rice.png')}/>
+                        <Text style={homeStyle.cateTtile}>밥/반찬</Text>
+                    </TouchableOpacity> 
+                    <TouchableOpacity style={homeStyle.imgBox}>  
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/freez.png')}/>
+                        <Text style={homeStyle.cateTtile}>냉동식품</Text>
+                    </TouchableOpacity>  
+                    <TouchableOpacity style={homeStyle.imgBox}> 
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/bread.png')}/>
+                        <Text style={homeStyle.cateTtile}>제과/제빵</Text>
+                    </TouchableOpacity >
+                    <TouchableOpacity style={homeStyle.imgBox}>   
+                        <Image style={homeStyle.cateIcon} source={require('../assets/Cate/dissert.png')}/>
+                        <Text style={homeStyle.cateTtile}>디저트/간식</Text>
+                    </TouchableOpacity>  
+                </View>
+                {/* banner */}
+                <View style={homeStyle.banner}>
+                    <Image source={require("../assets/Banner.png")} style={{resizeMode:"contain"}}/>
+                </View>
+                <View style={homeStyle.recomm}>
+                    <Text style={homeStyle.recommTitle}>#이런 음식 어때요?</Text>
+                    <ScrollView horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    scrollEventThrottle={200}>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
 
-            {/* menu */}
-            <View style={homeStyle.menuBar}>
-                {
-                    menu.map(data => {
-                        return <TouchableOpacity 
-                            onPress={() => menuClick(data.num)} 
-                            key={data.num} 
-                            style={{
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "50%",
-                                height: "100%",
-                                borderBottomWidth: data.num === menuBorder ? 2 : 0,
-                                borderColor: "red",
-                            }}
-                        >
-                            <Text>{data.text}</Text>
+                            </Card>
                         </TouchableOpacity>
-                    })
-                }
-            </View>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
 
-            {/* list */}
-            <SafeAreaView style={homeStyle.list}>
-                <FlatList 
-                    data={itemList}
-                    renderItem={
-                        ({item}) => <Item 
-                            id={item.id}
-                            name={item.name}
-                            content={item.content}
-                            user={item.user}
-                            distance={item.distance}
-                            state={item.state}
-                            itemClick={itemClick}
-                        />
-                    }
-                    keyExtractor={item => item.id.toString()}
-                    contentContainerStyle={{ paddingBottom: 336 }}
-                    refreshing={refresh}
-                    onRefresh={refreshFunc}
-                    style={homeStyle.listView}
-                />
-            </SafeAreaView>
-        </View>
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+                <View style={homeStyle.recomm}>
+                    <Text style={homeStyle.recommTitle}>#이런 음식 어때요?</Text>
+                    <ScrollView horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    scrollEventThrottle={200}>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{margin:3}}> 
+                            <Card style={homeStyle.recommCard}>
+
+                            </Card>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+            </View>
+        </ScrollView>
     )
 }
 
 const homeStyle = StyleSheet.create({
+    homebox:{
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center",
+        flexDirection:"column",
+        backgroundColor:"#ffffff",
+    },
+    //cate
+    cate:{
+        width:"95%",
+        flexWrap:"wrap",
+        flexDirection:"row",
+        justifyContent:"center",
+        marginBottom:20
+    },
+    cateTtile:{
+        fontSize:13,
+        color:"#757575",
+        fontWeight:"700",
+    },
+    imgBox:{
+        justifyContent:"center",
+        alignItems:"center",
+    },
     // banner
     banner: {
         display: "flex",
@@ -120,21 +172,37 @@ const homeStyle = StyleSheet.create({
         height: 123,
         position: "relative"
     },
+    cateIcon:{
+        resizeMode:"contain",
+        width:66,
+        height:66,
+        margin:13,
+    },
+    recomm:{
+        flexDirection:"column",
+        width:"100%",
+        paddingTop:10,
+      
+    },
+    recommTitle:{
+        fontSize:18,
+        fontWeight:"700",
+        color:"#ff6767",
+        margin:10,
+        textAlign:"left"
 
-    // menu
-    menuBar: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        height: 50,
-        borderBottomWidth: 0.5,
-        borderBottomColor:"#d9d9d9",
-        backgroundColor:"#ffffff",
     },
-    list:{
-        height:"100%",
-        backgroundColor:"#ffffff",
+    recommBox:{
+        height:170,
+        width:"100%",
+        margin:10
     },
+    recommCard:{
+        width:165,
+        height:149,
+        borderRadius:10,
+        backgroundColor:"#d9d9d9",
+    }
 });
 
 export default Home;

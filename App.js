@@ -25,7 +25,9 @@ import Profile from './scenes/profile/Profile';
 import ProfileEdit from './scenes/profile/ProfileEdit';
 import ProfileHistory from './scenes/profile/ProfileHistory';
 import ProfileHeader from './component/header/ProfileHeader';
+
 import HistoryHeader from './component/header/HistoryHeader';
+import WriteHeader from './component/header/WriteHeader';
 
 const AppStack = createStackNavigator();
 
@@ -155,8 +157,8 @@ function App() {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
+        activeTintColor: "#ff6767",
+        inactiveTintColor: "#7e7e7e",
       }}
     >
       <TabNavigator.Screen name="Home" component={HomeTab} options={{ title : "홈" }} />
@@ -200,8 +202,18 @@ function App() {
         <AppStack.Screen name="Login" component={Error} options={{ headerShown: false }} />
       }
       <AppStack.Screen name="Tab" component={Tab} options={{ headerShown: false }} />
-      <AppStack.Screen name="Detail" component={Detail} options={{ headerShown: true }} />
-      <AppStack.Screen name="Write" component={Write} options={{ headerShown: true }} />
+      <AppStack.Screen name="Detail" component={Detail} options={{headerLeft: null,
+          headerStyle: {
+            height: 90
+          },
+          headerTitle: props => <Header {...props} /> 
+        }} />
+      <AppStack.Screen name="Write" component={Write} options={{ headerLeft: null,
+          headerStyle: {
+            height: 90
+          },
+          headerTitle: props => <WriteHeader {...props} /> 
+        }}  />
       <AppStack.Screen 
         name="ChatListRoom" 
         component={ChatListRoom} 

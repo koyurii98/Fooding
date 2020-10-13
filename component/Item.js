@@ -31,7 +31,7 @@ function Item(props) {
 
 const itemStyle = StyleSheet.create({
     listCard:{
-        width:"99%",
+        width:"98%",
     },
     // list
     listBox: {
