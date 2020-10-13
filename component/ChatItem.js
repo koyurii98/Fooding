@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-import { ListItem, Left, Body, Right, Thumbnail } from 'native-base';
+import { Thumbnail } from 'native-base';
 import moment from 'moment';
 moment.locale("ko");
 
 function ChatItem(props) {
-  const { id, name, image, address, text, time, listClick } = props;
+    const { id, name, image, address, text, time, listClick, obj } = props;
 
-  return <TouchableOpacity style={chatItemStyle.container} onPress={() => listClick(id, name)}>
+    return <TouchableOpacity style={chatItemStyle.container} onPress={() => listClick(obj)}>
         <View style={chatItemStyle.box}>
             <Thumbnail source={image || require("../assets/profile.png")} />
             <View style={chatItemStyle.leftView}>
@@ -29,7 +29,8 @@ function ChatItem(props) {
             </View>
         </View>
     </TouchableOpacity>
-    }
+}
+
 const chatItemStyle = StyleSheet.create({
     container: {
         flex: 1,

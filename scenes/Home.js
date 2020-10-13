@@ -5,18 +5,8 @@ import Item from '../component/Item';
 
 function Home(props) {
     const [ menuBorder, setMenuBorder ] = useState(0); 
-    const [ itemList, setItemmList ] = useState([
-        { id: 0, name: "반찬1", image: "", content: "설명 부분입니다. 해당 내용은 반찬1 입니다.", user: "꼬부맘1", distance: "10km 이내", state: "판매" },
-        { id: 1, name: "반찬2", image: "", content: "설명 부분입니다. 해당 내용은 반찬2 입니다.", user: "꼬부맘2", distance: "11km 이내", state: "요청" },
-        { id: 2, name: "반찬3", image: "", content: "설명 부분입니다. 해당 내용은 반찬3 입니다.", user: "꼬부맘3", distance: "12km 이내", state: "판매" },
-        { id: 3, name: "반찬4", image: "", content: "설명 부분입니다. 해당 내용은 반찬4 입니다.", user: "꼬부맘4", distance: "13km 이내", state: "요청" },
-        { id: 4, name: "반찬5", image: "", content: "설명 부분입니다. 해당 내용은 반찬5 입니다.", user: "꼬부맘5", distance: "14km 이내", state: "판매" },
-        { id: 5, name: "반찬6", image: "", content: "설명 부분입니다. 해당 내용은 반찬6 입니다.", user: "꼬부맘6", distance: "15km 이내", state: "판매" },
-        { id: 6, name: "반찬7", image: "", content: "설명 부분입니다. 해당 내용은 반찬7 입니다.", user: "꼬부맘7", distance: "16km 이내", state: "요청" },
-        { id: 7, name: "반찬8", image: "", content: "설명 부분입니다. 해당 내용은 반찬8 입니다.", user: "꼬부맘8", distance: "17km 이내", state: "요청" },
-        { id: 8, name: "반찬9", image: "", content: "설명 부분입니다. 해당 내용은 반찬9 입니다.", user: "꼬부맘9", distance: "18km 이내", state: "판매" },
-        { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
-    ]);
+
+    const itemList = props.route.params.items;
 
     const menu = [
         { num: 0, text: "판매" },
@@ -42,8 +32,8 @@ function Home(props) {
 
     const backAction = () => {
         Alert.alert("확인", "종료 하시겠습니까?", [
-            { text: "취소", onPress: () => null, style: "cancel" }, 
-            {  text: "종료", onPress: () => BackHandler.exitApp() }
+            { text: "종료", onPress: () => BackHandler.exitApp() }, 
+            {  text: "취소", onPress: () => null, style: "cancel" }
         ]);
         return true;
     };
@@ -91,10 +81,12 @@ function Home(props) {
                     renderItem={
                         ({item}) => <Item 
                             id={item.id}
-                            name={item.name}
+                            userId={item.userId}
+                            title={item.title}
                             content={item.content}
-                            user={item.user}
-                            distance={item.distance}
+                            image={item.image}
+                            name={item.user.name}
+                            distance={item.user.address}
                             state={item.state}
                             itemClick={itemClick}
                         />

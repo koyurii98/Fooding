@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import {Card} from 'native-base';
 
 function Item(props) {
-    const { id, name, image, content, user, distance, state, itemClick } = props;
-    const obj = { id, name, content, user, distance, state };
+    const { id, userId, title, image, content, name, distance, state, itemClick } = props;
+    const obj = { id, userId, title, image, content, name, distance, state };
         return <Card style={itemStyle.listCard}>
             <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(obj)}>
             <Image 
@@ -13,14 +13,14 @@ function Item(props) {
             ></Image>
             <View style={itemStyle.listContent}>
                 <View style={itemStyle.listLayout}>
-                    <Text style={{ fontSize: 20, marginBottom: 5 }}>{name}</Text>
+                    <Text style={{ fontSize: 20, marginBottom: 5 }}>{title}</Text>
                     <Text style={{ color: "red" }}>{state}</Text>
                 </View>
                 <View>
                     <Text style={{ color: "gray" }} numberOfLines={1}>{content}</Text>
                 </View>
                 <View style={itemStyle.listBotText}>
-                    <Text>{user}</Text>
+                    <Text>{name}</Text>
                     <View style={itemStyle.listLine}></View>
                     <Text>{distance}</Text>
                 </View>
