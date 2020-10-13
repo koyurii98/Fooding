@@ -3,10 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import {Card} from 'native-base';
 
 function Item(props) {
-    const { id, title, image, content, user, state, itemClick } = props;
-    const obj = { id, title, image, content, user, state };
+    const { id, title, image, content, user, state, itemClick, data } = props;
         return <Card style={itemStyle.listCard}>
-            <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(obj)}>
+            <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(data)}>
             <Image 
                 style={itemStyle.listImage}
                 source={image || require("../assets/example.png")}

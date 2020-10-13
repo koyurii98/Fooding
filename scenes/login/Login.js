@@ -10,7 +10,7 @@ console.disableYellowBox = true;
 function Login(props) {
     const [ email, setEmail ] = useState("");
 
-    const { socket } = props.route.params;
+    const { socket, setLogin, setRooms } = props.route.params;
 
     async function userLogin() {
         if(!email) {
@@ -32,10 +32,17 @@ function Login(props) {
 
             const userInfo = result.data.user;
 
+            const roomData = await axios.get(`${SERVER_URL}/room/user/all?userId=${userInfo.id}`);
+
+            if(!roomData.data || !roomData.data.data) throw 500;
+
+            setRooms(roomData.data.data);
+
             socket.emit("join", { id : userInfo.id });
 
             props.navigation.navigate("Tab", { screen : "Home" });
-            props.route.params.setUser(userInfo);
+
+            setLogin(userInfo);
         } catch(err) {  
             Alert.alert("실패", "로그인에 실패하였습니다. 다시 시도해주세요.",
                 [{ text: "확인", onPress: () => null, style: "cancel" }, ]

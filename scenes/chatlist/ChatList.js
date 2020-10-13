@@ -5,31 +5,62 @@ moment.locale("ko");
 import List from '../../component/ChatItem';
 
 function ChatList(props) {
-    const data = [];
+    const { rooms, setRooms, login } = props.route.params;
 
-    function listClick(obj) {
+    function listClick(id, data, name, target_id) {
         props.navigation.navigate("ChatListRoom", {
-            data : obj.board,
+            id,
+            data,
+            name,
+            setRooms,
+            login,
+            target_id,
+            first : false
         });
     }
 
     useEffect(() => {
 
-    }, []);
+    }, [rooms]);
 
     return (
         <ScrollView style={chatListStyle.container}>
             {
-                data.map(value => {
+                rooms.map(value => {
+                    let name = "";
+                    let image = "";
+                    let address = "";
+                    let text = "";
+                    let time = "";
+                    let state = "";
+                    let target_id = null;
+                    
+                    value.userId.forEach(data => {
+                        if(data.id !== login.id) {
+                            name = data.name;
+                            image = data.image;
+                            address = data.address;
+                            time = data.createdAt;
+                            state = "판매자";
+                            target_id = data.id;
+                        } else {
+                            state = value.board.state === "판매" ? "구매자" : "요청자"
+                        }
+                    });
+
+                    text = `제목) ${value.board.title} / ${value.board.state}`
+
                     return <List 
                         key={value.id}
                         id={value.id}
-                        name={value.board.user.name}
-                        image={value.board.user.image}
-                        address={value.board.user.address}
-                        text={value.board.title}
-                        time={value.createdAt}
-                        obj={value}
+                        name={name}
+                        text={text}
+                        image={image}
+                        address={address}
+                        time={time}
+                        state={state}
+                        data={value.board}
+                        target_id={target_id}
                         listClick={listClick}
                     />
                 })

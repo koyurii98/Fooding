@@ -8,25 +8,38 @@ const { SERVER_URL } = ENV_FUNC();
 import Header from '../../component/header/ChatListRoomHeader';
 
 function ChatListRoom(props) {
-    const { socket } = props.route.params;
+    const { socket, id, name, data, first, login, target_id } = props.route.params;
+
     const [ menu, setMenu ] = useState(false);
     const [ text, setText ] = useState("");
 
     const [ msg, setMsg ] = useState([]);
+    const [ load, setLoad ] = useState(false);
 
     const scrollRef = useRef(null);
-
+    
     useEffect(() => {
+        if(first) {
+            console.log("first");
+        }
         msgInit();
-    }, []);
+
+        socket.on("msg receive", (data) => {
+            setLoad(load ? false : true);
+        });
+
+        return () => {
+            socket.on("msg receive");
+        }
+    }, [load]);
 
     async function msgInit() {
         try {
+            scrollRef.current.scrollToEnd({ animated: true });
+
             const result = await axios.get(`${SERVER_URL}/message/room/all?roomId=${id}`);
 
-            setMsg(result.data.data);
-
-            scrollRef.current.scrollToEnd({ animated: true });
+            await setMsg(result.data.data);
         } catch(err) {
             Alert.alert("오류", "메시지를 불러올 수 없습니다.", [
                 { text : "확인", onPress: () => null, style: "cancel" }
@@ -39,17 +52,24 @@ function ChatListRoom(props) {
             return false;
         }
 
+        if(!target_id) {
+            return false;
+        }
+
         try {
             const result = await axios.post(`${SERVER_URL}/message/create`, {
                 content : text,
-                // send_id : user.id,
-                // roomId : id
+                send_id : login.id,
+                roomId : id
             });
 
             setText("");
             setMsg(msg.concat(result.data.data));
 
-            // socket.emit("msg send", { msg_obj : result.data.data, target });
+            socket.emit("msg send", {
+                msg : result.data.data,
+                target_id
+            });
 
             scrollRef.current.scrollToEnd({ animated: true });
         } catch(err) {
@@ -65,6 +85,9 @@ function ChatListRoom(props) {
             <ScrollView 
                 style={chatListRoomStyle.content}
                 ref={scrollRef}
+                onContentSizeChange={() => {
+                    scrollRef.current.scrollToEnd({ animated: true });
+                }}
             >
                 {
                     msg.map(value => {

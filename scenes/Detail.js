@@ -1,12 +1,63 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import moment from 'moment';
+import axios from 'axios';
+
+import ENV_FUNC from '../environment';
+const { SERVER_URL } = ENV_FUNC();
+
 function Detail(props) {
+    const { id, title, content, image, category, price, negotiation, state, user, createdAt, success, login, rooms, setRooms } = props.route.params;
+
+    // 거래 신청 누를 경우
     const clickDeal = ()=>{
+        if(!login.id || !login.email) {
+            Alert.alert("확인", "로그인 후 이용해주세요.", [
+                { text: "로그인 하러 가기", onPress: () => props.navigation.navigate("Login"), style: "cancel" },
+                { text: "취소", onPress: () => null, style: "cancel" }
+              ]
+            ); 
+            return false;
+        }
+
         Alert.alert("확인", "거래를 하시겠습니까?", [
-            { text: "거래하기", onPress: () => console.log("거래"), style: "cancel" },
+            { text: "거래하기", onPress: chatRoomCreate, style: "cancel" },
             { text: "취소", onPress: () => null, style: "cancel" }
-          ]);
+          ]
+        );
     }
+
+    // 거래 신청 처리 및 채팅방 생성
+    async function chatRoomCreate() {
+        if(user.id === login.id) return false;
+        
+        try {
+            const result = await axios.post(`${SERVER_URL}/room/create`, {
+                boardId : id,
+                user1 : user.id,
+                user2 : login.id
+            });
+
+            if(!result.data || !result.data.data) throw 500;
+
+            if(!result.data.ovl) setRooms(rooms.concat(result.data.data));
+
+            props.navigation.navigate("ChatListRoom", {
+                id : result.data.data.id,
+                data : props.route.params,
+                name : user.name,
+                login,
+                target_id : user.id,
+                first: true
+            });
+        } catch(err) {
+            Alert.alert("오류", "거래 신청에 실패하였습니다.", [
+                    { text: "확인", onPress: () => null, style: "cancel" }
+                ]
+            );
+        }
+    }
+
     return (
         <View style={detailStyle.detailBox}>
             <ScrollView style={{height:"100%",paddingBottom:66}}>
@@ -18,14 +69,12 @@ function Detail(props) {
                 </View>
                 <View style={{width:"100%",padding:17,borderBottomWidth:1,borderBottomColor:"#d2d2d2"}}>
                     <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                        <Text style={detailStyle.productTitle}>[식재료]채소판매</Text>
-                        <Text style={detailStyle.productState}>요청</Text> 
+                        <Text style={detailStyle.productTitle}>{`[${category}] `}{title}</Text>
+                        <Text style={detailStyle.productState}>{state}</Text> 
                     </View>
-                    <Text style={detailStyle.uploadDate}>2020년 10월 08일</Text>
+                    <Text style={detailStyle.uploadDate}>{moment(createdAt).format("YYYY년 MM월 DD일")}</Text>
                     <Text style={detailStyle.productInfo}>
-                    채소를 시켰는데 생각보다 많이왔네요,,^^..
-                    감자,당근 있습니다^^ 
-                    교환이나 구매 의향 있으시면 메세지 주세요~^^
+                        {content}
                     </Text>
                 </View>
                 <View style={detailStyle.userProfile}>
@@ -34,23 +83,31 @@ function Detail(props) {
                         <View style={{marginLeft:15}}>
                             <View style={detailStyle.userInfo}>
                                 <Image source={require('../assets/puddingIcon.png')}/>
-                                <Text style={detailStyle.userName}>꼬부맘</Text>
+                                <Text style={detailStyle.userName}>{user.name}</Text>
                             </View>
                             <Text style={detailStyle.Recent}>최근 5건의 거래를 하였습니다.</Text>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={()=>alert("스토어")}>
+                    <TouchableOpacity onPress={()=> alert("스토어")}>
                         <Image style={detailStyle.userStore} source={require('../assets/store.png')}/>
                         <Text style={{color:"#1d1d1d",fontSize:12,marginLeft:3}}>스토어방문</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
             <View style={detailStyle.bottomBtns}>
-                    <TouchableOpacity style={detailStyle.BuyMenu} onPress={()=>alert('메뉴클릭')}>
+                    <TouchableOpacity style={detailStyle.BuyMenu} onPress={()=> alert('메뉴클릭')}>
                         <Image source={require('../assets/menu-White.png')}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={detailStyle.BuyBtn} onPress={clickDeal}>
-                        <Text style={{color:"#ffffff",fontSize:20}}>거래신청하기</Text>
+                    <TouchableOpacity 
+                        style={detailStyle.BuyBtn} 
+                        onPress={login.id === user.id ? () => console.log("거래 완료 처리") : clickDeal}
+                    >
+                        {
+                            login.id === user.id ?
+                            <Text style={{color:"#ffffff",fontSize:20}}>{success === "1" ? "이미 완료된 거래입니다." : "거래 완료하기"}</Text>
+                            :
+                            <Text style={{color:"#ffffff",fontSize:20}}>{success === "1" ? "이미 완료된 거래입니다." : "거래 신청하기"}</Text>
+                        }
                     </TouchableOpacity>
             </View>
         </View>

@@ -1,5 +1,9 @@
 import React, { useState, useEffect }  from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView, BackHandler, Alert, ScrollView } from 'react-native';
+import axios from 'axios';
+import ENV_FUNC from '../environment';
+const { SERVER_URL } = ENV_FUNC();
+
 import Item from '../component/Item';
 
 function Store(props) {
@@ -17,20 +21,40 @@ function Store(props) {
       { id: 5, title: "반찬6", image: "", content: "설명 부분입니다. 해당 내용은 반찬6 입니다.", user: "꼬부맘6", state: "판매" },
       { id: 6, title: "반찬7", image: "", content: "설명 부분입니다. 해당 내용은 반찬7 입니다.", user: "꼬부맘7", state: "요청" },
     ]);
+
+    // 디비에서 가져온 데이터
+    const { items, setItems } = props.route.params;
   
     const menu = [
       { num: 0, text: "실시간판매" },
       { num: 1, text: "실시간요청" },
     ];
-  
-    function refreshFunc() {
+
+    useEffect(() => {
+    }, [items]);
+
+    async function refreshFunc() {
       setRefresh(true);
-      console.log("refresh !");
+
+      try {
+        const result = await axios.get(`${SERVER_URL}/board/all`);
+  
+        if(result.data && result.data.data) {
+          setItems(result.data.data);
+        } else {
+          throw "err";
+        }
+      } catch(err) {
+        Alert.alert("실패", "데이터 로드 중 에러가 발생했습니다. 다시 시도해 주세요.", [
+          { text: "확인", onPress: () => null, style: "cancel" }
+        ]);
+      }
+
       setRefresh(false);
     }
   
-    function itemClick(obj) {
-      props.navigation.navigate("Detail", obj);
+    function itemClick(data) {
+      props.navigation.navigate("Detail", data);
     }
   
     function menuClick(num) {
@@ -65,14 +89,16 @@ function Store(props) {
               {/* list */}
               <SafeAreaView style={listStyle.list}>
                   <FlatList 
-                      data={itemList}
+                      data={items}
                       renderItem={
                           ({item}) => <Item 
                               id={item.id}
                               title={item.title}
                               content={item.content}
-                              user={item.user}
+                              image={item.image}
+                              user={item.user.name}
                               state={item.state}
+                              data={item}
                               itemClick={itemClick}
                           />
                       }
