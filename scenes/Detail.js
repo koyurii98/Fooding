@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import ENV_FUNC from '../environment';
 const { SERVER_URL } = ENV_FUNC();
 
 function Detail(props) {
-    const { id, title, content, image, category, price, negotiation, state, user, createdAt, success, login, rooms, setRooms } = props.route.params;
+    const { id, title, content, image, category, price, negotiation, state, user, createdAt, success, login, rooms, setRooms, socket } = props.route.params;
 
     // 거래 신청 누를 경우
     const clickDeal = ()=>{
@@ -41,6 +41,11 @@ function Detail(props) {
             if(!result.data || !result.data.data) throw 500;
 
             if(!result.data.ovl) setRooms(rooms.concat(result.data.data));
+
+            socket.emit("room create", {
+                msg : result.data.data,
+                target_id : user.id
+            });
 
             props.navigation.navigate("ChatListRoom", {
                 id : result.data.data.id,

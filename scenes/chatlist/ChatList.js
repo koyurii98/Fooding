@@ -19,10 +19,6 @@ function ChatList(props) {
         });
     }
 
-    useEffect(() => {
-
-    }, [rooms]);
-
     return (
         <ScrollView style={chatListStyle.container}>
             {
