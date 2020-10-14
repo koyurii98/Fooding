@@ -11,9 +11,9 @@ function Write(props) {
     const [uploadCate , setUploadCate]=useState('');
     const [price , setPrice]=useState('');
     const [image, setImage] = useState(null);
-    const [priceCheck, setPriceCheck] = useState('checked');
+    const [priceCheck, setPriceCheck] = useState(false);
 
-    const { login,items,setItems}=props.route.params;
+    const { login, items, setItems } = props.route.params;
 
     useEffect(() => {
       (async () => {
@@ -45,7 +45,7 @@ function Write(props) {
         return () => {
             props.navigation.setOptions(null);
         }
-    }, [props.navigation, text,title,cate,uploadCate,price,login,priceCheck]);
+    }, [props.navigation, text, title, cate, uploadCate, price, login, priceCheck]);
     
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -58,9 +58,17 @@ function Write(props) {
         if (!result.cancelled) {
           setImage(result.uri);
         }
-      };
-    
+    };
 
+    function priceCheckEvent() {
+        if(priceCheck) {
+            setPrice("");
+            setPriceCheck(false);
+        } else {
+            setPriceCheck(true);
+        }
+    }
+    
     return (
         <View style={writeStyle.form}>
             <ScrollView style={{width:"100%" }}>
@@ -115,11 +123,11 @@ function Write(props) {
                             placeholderTextColor="#a5a5a5" 
                             style={writeStyle.PriceInputBox}
                             onChangeText={(price)=>setPrice(price)}
-                            value={priceCheck===true?"가격협의":price}
+                            value={priceCheck ? "가격협의" : price}
                             keyboardType={"number-pad"}/>
-                        <Text style={{fontSize:16,margin:10,}}>{priceCheck===true?"":"원"}</Text>
+                        <Text style={{fontSize:16,margin:10,}}>{priceCheck ? "" : "원"}</Text>
                     </View>
-                    <TouchableOpacity style={writeStyle.priceCheckbox} onPress={()=>priceCheck?setPriceCheck(false):setPriceCheck(true)}>
+                    <TouchableOpacity style={writeStyle.priceCheckbox} onPress={priceCheckEvent}>
                         <CheckBox 
                         checked={priceCheck}
                         style={writeStyle.checkbox}

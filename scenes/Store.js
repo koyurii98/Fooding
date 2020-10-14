@@ -94,7 +94,6 @@ function Store(props) {
                       renderItem={
                           ({item}) => {
                             if(item.state==="판매" && menuBorder===0){
-                              console.log("a")
                               return <Item 
                                 id={item.id}
                                 title={item.title}

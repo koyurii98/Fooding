@@ -8,6 +8,8 @@ function WriteHeader(props) {
 
   async function uploadHandle(){
     const {title,text,cate,price,uploadCate,userId,items,setItems,priceCheck}=props;
+
+    console.log(userId);
     
     if(!title || !text || !cate  || !uploadCate || !userId ){
       Alert.alert("경고", "빈칸이 있습니다. 빈칸을 모두 채워주세요.", [
@@ -17,13 +19,13 @@ function WriteHeader(props) {
     }
     try{
       const result = await axios.post(`${SERVER_URL}/board/create`,{
-        title:props.title,
-        content:props.text,
-        category:props.cate,
-        price:props.priceCheck===true?"가격협의":props.price,
+        title,
+        content:text,
+        category:cate,
+        price:priceCheck===true?"가격협의":price,
         state:props.uploadCate,
-        userId:props.userId,
-        negotiation:props.priceCheck,
+        userId,
+        negotiation:priceCheck,
       });
       if(result.data && result.data.data){
         const arr = items;
