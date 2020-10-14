@@ -1,11 +1,14 @@
 import 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Alert, Image } from 'react-native';
+import { StyleSheet, Alert, Image } from 'react-native';
+import {Root} from 'native-base'
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import socketIO from 'socket.io-client';
+
 import ENV_FUNC from './environment';
 const { SERVER_URL } = ENV_FUNC();
 
@@ -19,6 +22,7 @@ import Store from './scenes/Store';
 import List from './scenes/List';
 import Detail from './scenes/Detail';
 import Write from './scenes/Write';
+import EditWrite from './scenes/EditWrite';
 import ChatList from './scenes/chatlist/ChatList';
 import ChatListRoom from './scenes/chatlist/ChatListRoom';
 import Profile from './scenes/profile/Profile';
@@ -27,7 +31,6 @@ import ProfileHistory from './scenes/profile/ProfileHistory';
 import ProfileHeader from './component/header/ProfileHeader';
 
 import HistoryHeader from './component/header/HistoryHeader';
-import WriteHeader from './component/header/WriteHeader';
 
 const AppStack = createStackNavigator();
 
@@ -37,13 +40,25 @@ const StoreTabStack = createStackNavigator();
 const ChatListTabStack = createStackNavigator();
 const ProfileTabStack = createStackNavigator();
 
+const socket = socketIO.connect(SERVER_URL);
+
 function App() {
-  const [ user, setUser ] = useState(null);
+  // 유저 정보 ( 로그인 유저 )
+  const [ login, setLogin ] = useState({
+    id : 0,
+    email : null
+  });
+  // 초기 데이터 중, 최근 게시글 데이터
+  const [ items, setItems ] = useState([]);
+  // 로그인 한 유저의 채팅방 데이터
+  const [ rooms, setRooms ] = useState([]);
 
   useEffect(() => {
     storageCheck();
-  }, [user]);
+    itemsGet();
+  }, [login]);
 
+  // 시큐어 스토리지 체크
   async function storageCheck() {
     try {
       let result = await SecureStore.getItemAsync("fooding_user");
@@ -52,18 +67,47 @@ function App() {
         result = JSON.parse(result);
         // server user sign check code ..
 
-        setUser(result.email);
+        setLogin(result.email);
       }
+      
+      socket.emit("user connect", { msg : login.email });
     } catch(err) {
+      console.log(err);
       Alert.alert("로그인 실패", "로그인 인증 중 에러가 발생했습니다. 앱을 다시 실행해주세요.",
         [{ text: "확인", onPress: () => null, style: "cancel" }, ]
       );
     }
   }
 
-  function HomeTab() {
+  // 스토어에 보여줄 아이템 가져오기 ( 최근 데이터 순 로드 )
+  async function itemsGet() {
+    try {
+      const result = await axios.get(`${SERVER_URL}/board/all`);
+
+      if(result.data && result.data.data) {
+        setItems(result.data.data);
+      } else {
+        throw "err";
+      }
+    } catch(err) {
+      Alert.alert("실패", "데이터 로드 중 에러가 발생했습니다. 다시 시도해 주세요.", [
+        { text: "확인", onPress: () => null, style: "cancel" }
+      ]);
+    }
+  }
+
+
+
+
+
+
+
+
+// ============================= ============================= Navigation Stack AND Tab ============================= ============================= //
+
+function HomeTab() {
     return <HomeTabStack.Navigator>
-      <HomeTabStack.Screen name="Home" component={Home} 
+      <HomeTabStack.Screen name="Home" component={Home} initialParams={{ login }}
         options={{ 
           headerLeft: null,
           headerStyle: {
@@ -77,7 +121,8 @@ function App() {
   
   function StoreTab() {
     return <StoreTabStack.Navigator>
-      <StoreTabStack.Screen name="Store" component={Store} options={{ 
+      <StoreTabStack.Screen name="Store" component={Store} initialParams={{ login, items, setItems }}
+        options={{ 
           headerLeft: null,
           headerStyle: {
             height: 90
@@ -95,6 +140,7 @@ function App() {
         name="ChatList" 
         component={ChatList} 
         options={{ headerLeft: null }} 
+        initialParams={{ login, rooms, setRooms }}
       />
     </ChatListTabStack.Navigator>
   }
@@ -110,7 +156,7 @@ function App() {
           },
           headerTitle: props => <Header {...props} /> 
         }} 
-        initialParams={{ user }}
+        initialParams={{ login }}
       />
       <ProfileTabStack.Screen name="ProfileEdit" component={ProfileEdit} options={{ 
         headerShown: true,
@@ -166,7 +212,7 @@ function App() {
       <TabNavigator.Screen name="ChatList" component={ChatListTab} options={{ title : "채팅" }} 
         listeners={({ navigation }) => ({
           tabPress: e => {
-            if(!user) {
+            if(!login.email) {
               e.preventDefault();
               Alert.alert("확인", "로그인 후 이용해주세요.", [
                 { text: "로그인 하러가기", onPress: () => navigation.navigate("Login"), style: "cancel" },
@@ -179,7 +225,7 @@ function App() {
       <TabNavigator.Screen name="Profile" component={ProfileTab} options={{ title : "마이페이지" }}
         listeners={({ navigation }) => ({
             tabPress: e => {
-              if(!user) {
+              if(!login.email) {
                 e.preventDefault();
                 Alert.alert("확인", "로그인 후 이용해주세요.", [
                   { text: "로그인 하러가기", onPress: () => navigation.navigate("Login"), style: "cancel" },
@@ -192,43 +238,52 @@ function App() {
     </TabNavigator.Navigator>
   }
 
-  return <NavigationContainer>
-    <AppStack.Navigator initialParams={{ user }}>
+  return<Root>
+    <NavigationContainer>
+    <AppStack.Navigator initialParams={{ login }}>
       <AppStack.Screen name="First" component={First} options={{ headerShown: false }} />
       {
-        !user ? 
-        <AppStack.Screen name="Login" component={Login} initialParams={{ Screen: "tab", setUser }} options={{ headerShown: false }} />
+        !login.email ? 
+        <AppStack.Screen name="Login" component={Login} initialParams={{ Screen: "Tab", setLogin, socket, setRooms }} options={{ headerShown: false }} />
         :
         <AppStack.Screen name="Login" component={Error} options={{ headerShown: false }} />
       }
       <AppStack.Screen name="Tab" component={Tab} options={{ headerShown: false }} />
-      <AppStack.Screen name="Detail" component={Detail} options={{headerLeft: null,
+      <AppStack.Screen name="Detail" component={Detail} initialParams={{ login, rooms, setRooms }}
+        options={{headerLeft: null,
           headerStyle: {
             height: 90
           },
           headerTitle: props => <Header {...props} /> 
-        }} />
-      <AppStack.Screen name="Write"  component={Write} options={{ 
-        headerShown: true,
-        header: ({ navigation}) => {
-          return <WriteHeader navigation={navigation}
-          />
-        },
-        headerLeft: null,  
-        headerStyle: {
-          height: 90,
-        },
+        }} 
+      />
+      <AppStack.Screen name="Write"  component={Write}
+        initialParams={{ login, items, setItems }}
+        options={{ 
+          headerStyle: {
+            height: 90,
+          },
         }}
-        />
+      />
+       <AppStack.Screen name="EditWrite"  component={EditWrite}
+        initialParams={{ login, items, setItems }}
+        options={{ 
+          headerStyle: {
+            height: 90,
+          },
+        }}
+      />
       <AppStack.Screen 
         name="ChatListRoom" 
         component={ChatListRoom} 
+        initialParams={{ socket }}
         options={{ 
           headerShown: false,
         }} 
       />
     </AppStack.Navigator>
   </NavigationContainer>
+  </Root>
 }
 
 const tabStyle = StyleSheet.create({

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View, Button,Image,TouchableOpacity,TextInput,Switch } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity, TextInput, Switch, ScrollView } from 'react-native';
 
 function ProfileEdit(props) {
     const [isMessage, setIsMessage] = useState(false);
@@ -11,70 +11,73 @@ function ProfileEdit(props) {
     const keywordSwitch = () => setIsKeyword(previousState => !previousState);
     return (
         <View style={ProfileEditStyle.ProfileEditBox}>
-            <View style={ProfileEditStyle.ProfileBox}>
-                <Text style={ProfileEditStyle.ProfileEditTitle}>프로필변경</Text>
-                <TouchableOpacity style={ProfileEditStyle.ProfileImg} onPress={()=>console.log("이미지수정")}>
-                    <Image style={{position:"absolute"}} source={require('../../assets/profile.png')} />
-                    <View style={ProfileEditStyle.ProfileImgEdit}>
-                        <Text style={{textAlign:"center",color:"#ffffff",fontWeight:"700",fontSize:15,}}>이미지수정</Text>
-                    </View>
-                </TouchableOpacity>
-                <View width="95%">
-                    <View style={ProfileEditStyle.ProfileInfo}>
-                        <Text style={ProfileEditStyle.ProfileInfoTitle}>이메일</Text>
-                        <Text style={ProfileEditStyle.ProfileInfoText}>abc@abc.com</Text>
-                    </View>
-                    <View style={ProfileEditStyle.ProfileInfo}>
-                        <Text style={ProfileEditStyle.ProfileInfoTitle}>닉네임</Text>
-                        <TextInput style={ProfileEditStyle.ProfileEditInput}/>
-                    </View>
-                    <View style={{flexDirection:"column"}}>
-                        <View style={ProfileEditStyle.ProfileInfo}>
-                            <Text style={ProfileEditStyle.ProfileInfoTitle}>주소</Text>
-                            <TouchableOpacity style={{width:"65%",justifyContent:"flex-start"}} onPress={()=>console.log("주소변경")}>
-                                <Text style={ProfileEditStyle.addressBtn}>주소변경</Text>
-                            </TouchableOpacity>
+            <ScrollView>
+                <View style={ProfileEditStyle.ProfileBox}>
+                    <Text style={ProfileEditStyle.ProfileEditTitle}>프로필변경</Text>
+                    <TouchableOpacity style={ProfileEditStyle.ProfileImg} onPress={()=>console.log("이미지수정")}>
+                        <Image style={{position:"absolute"}} source={require('../../assets/profile.png')} />
+                        <View style={ProfileEditStyle.ProfileImgEdit}>
+                            <Text style={{textAlign:"center",color:"#ffffff",fontWeight:"700",fontSize:15,}}>이미지수정</Text>
                         </View>
-                        <Text style={{width:"100%",marginBottom:10,color:"#5e5e5e",fontSize:16}}>서울특별시 관악구 가나다동 123-23</Text>
-                        <Text style={{fontSize:13,color:"#ff6767",marginBottom:10}}>다른 사용자에게는 주소가 아닌 km가 표시됩니다.</Text>
+                    </TouchableOpacity>
+                    <View width="95%">
+                        <View style={ProfileEditStyle.ProfileInfo}>
+                            <Text style={ProfileEditStyle.ProfileInfoTitle}>이메일</Text>
+                            <Text style={ProfileEditStyle.ProfileInfoText}>abc@abc.com</Text>
+                        </View>
+                        <View style={ProfileEditStyle.ProfileInfo}>
+                            <Text style={ProfileEditStyle.ProfileInfoTitle}>닉네임</Text>
+                            <TextInput style={ProfileEditStyle.ProfileEditInput}/>
+                        </View>
+                        <View style={{flexDirection:"column"}}>
+                            <View style={ProfileEditStyle.ProfileInfo}>
+                                <Text style={ProfileEditStyle.ProfileInfoTitle}>주소</Text>
+                                <TouchableOpacity style={{width:"65%",justifyContent:"flex-start"}} onPress={()=>console.log("주소변경")}>
+                                    <Text style={ProfileEditStyle.addressBtn}>주소변경</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={{width:"100%",marginBottom:10,color:"#5e5e5e",fontSize:16}}>서울특별시 관악구 가나다동 123-23</Text>
+                            <Text style={{fontSize:13,color:"#ff6767",marginBottom:10}}>다른 사용자에게는 주소가 아닌 km가 표시됩니다.</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-            <View style={ProfileEditStyle.alertBox}>
-                <Text style={ProfileEditStyle.ProfileEditTitle}>알림설정</Text>
-                <View style={ProfileEditStyle.SwitchBtn}>
-                    <Text style={ProfileEditStyle.SwitchTitle}>메세지알림</Text>
-                    <Switch
-                        trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
-                        thumbColor={isMessage ? "#ffffff" : "#f4f3f4"}
-                        onValueChange={messageSwitch}
-                        value={isMessage}
-                    />
+                <View style={ProfileEditStyle.alertBox}>
+                    <Text style={ProfileEditStyle.ProfileEditTitle}>알림설정</Text>
+                    <View style={ProfileEditStyle.SwitchBtn}>
+                        <Text style={ProfileEditStyle.SwitchTitle}>메세지알림</Text>
+                        <Switch
+                            trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
+                            thumbColor={isMessage ? "#ffffff" : "#f4f3f4"}
+                            onValueChange={messageSwitch}
+                            value={isMessage}
+                        />
+                    </View>
+                    <View style={ProfileEditStyle.SwitchBtn}>
+                        <Text style={ProfileEditStyle.SwitchTitle}>이벤트알림</Text>
+                        <Switch
+                            trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
+                            thumbColor={isEvent ? "#ffffff" : "#f4f3f4"}
+                            onValueChange={eventSwitch}
+                            value={isEvent}
+                        />
+                    </View>
+                    <View style={ProfileEditStyle.SwitchBtn}>
+                        <Text style={ProfileEditStyle.SwitchTitle}>키워드알림</Text>
+                        <Switch
+                            trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
+                            thumbColor={isKeyword ? "#ffffff" : "#f4f3f4"}
+                            onValueChange={keywordSwitch}
+                            value={isKeyword}
+                        />
+                    </View>
                 </View>
-                <View style={ProfileEditStyle.SwitchBtn}>
-                    <Text style={ProfileEditStyle.SwitchTitle}>이벤트알림</Text>
-                    <Switch
-                        trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
-                        thumbColor={isEvent ? "#ffffff" : "#f4f3f4"}
-                        onValueChange={eventSwitch}
-                        value={isEvent}
-                    />
-                </View>
-                <View style={ProfileEditStyle.SwitchBtn}>
-                    <Text style={ProfileEditStyle.SwitchTitle}>키워드알림</Text>
-                    <Switch
-                        trackColor={{ false: "#d1d1d1", true: "#ff6767" }}
-                        thumbColor={isKeyword ? "#ffffff" : "#f4f3f4"}
-                        onValueChange={keywordSwitch}
-                        value={isKeyword}
-                    />
-                </View>
-            </View>
+            </ScrollView>
         </View>
     );
 }
 const ProfileEditStyle = StyleSheet.create({
     ProfileEditBox:{
+        flex: 1,
         backgroundColor:"#ffffff",
         width:"100%",
         height:"100%",

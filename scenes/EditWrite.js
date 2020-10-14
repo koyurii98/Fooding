@@ -1,64 +1,40 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, TextInput, Image, ScrollView} from 'react-native';
 import {Item,Picker,CheckBox} from 'native-base';
-import WriteHeader from '../component/header/WriteHeader';
-import * as ImagePicker from 'expo-image-picker';
+import EditWriteHeader from '../component/header/EditWriteHeader';
 
-function Write(props) {
-    const [text , setText]=useState('');
-    const [title , setTitle]=useState('');
-    const [cate , setCate]=useState('');
-    const [uploadCate , setUploadCate]=useState('');
-    const [price , setPrice]=useState('');
-    const [image, setImage] = useState(null);
-    const [priceCheck, setPriceCheck] = useState('checked');
+function EditWrite(props) {
+    const { title,items,setItems,login,content,category,price,state}=props.route.params;
+    const [editText , setEditText]=useState(content);
+    const [editTitle , setEditTitle]=useState(title);
+    const [editCate , setEditCate]=useState(category);
+    const [editUploadCate , setEditUploadCate]=useState(state);
+    const [editPrice , setEditPrice]=useState(price);
+    const [editImage, setEditImage] = useState(null);
+    const [editPriceCheck, setEditPriceCheck] = useState('');
 
-    const { login,items,setItems}=props.route.params;
-
-    useEffect(() => {
-      (async () => {
-        if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          }
-        }
-      })();
-    }, []);
-
+    console.log(props.route.params);
     useLayoutEffect(() => {
         props.navigation.setOptions({
             header: props => 
-            <WriteHeader 
+            <EditWriteHeader 
                 {...props} 
-                text={text} 
-                title={title}
-                cate={cate}
-                uploadCate={uploadCate}
-                price={price}
+                editText={editText} 
+                editTitle={editTitle}
+                editCate={editCate}
+                editUploadCate={editUploadCate}
+                editPrice={editPrice}
                 userId={login.id}
                 items={items}
                 setItems={setItems}
-                priceCheck={priceCheck}
+                editPriceCheck={editPriceCheck}
             /> 
         });
         return () => {
             props.navigation.setOptions(null);
         }
-    }, [props.navigation, text,title,cate,uploadCate,price,login,priceCheck]);
+    }, [props.navigation, editText,editTitle,editCate,editUploadCate,editPrice,login,editPriceCheck]);
     
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-        console.log(result);
-        if (!result.cancelled) {
-          setImage(result.uri);
-        }
-      };
     
 
     return (
@@ -68,8 +44,8 @@ function Write(props) {
                     <Item picker style={{width:"49%"}}>
                     <Picker
                         mode="dropdown"
-                        onValueChange={(uploadCate)=>setUploadCate(uploadCate)}
-                        selectedValue={uploadCate}
+                        onValueChange={(editUploadCate)=>setEditUploadCate(editUploadCate)}
+                        selectedValue={editUploadCate}
                     >
                         <Picker.Item label="판매/요청선택" value="판매/요청선택" color="#7e7e7e"/>
                         <Picker.Item label="판매" value="판매" />
@@ -79,8 +55,8 @@ function Write(props) {
                     <Item picker style={{width:"49%"}}>
                     <Picker
                         mode="dropdown"
-                        onValueChange={(cate)=>setCate(cate)}
-                        selectedValue={cate}
+                        onValueChange={(editCate)=>setEditCate(editCate)}
+                        selectedValue={editCate}
                     >
                         <Picker.Item label="카테고리" value="카테고리" color="#7e7e7e"/>
                         <Picker.Item label="과일" value="과일" />
@@ -97,16 +73,16 @@ function Write(props) {
                 <TextInput style={writeStyle.TextInput}
                  placeholder="제목을 입력해주세요" 
                  placeholderTextColor="#a5a5a5"
-                 onChangeText={(title)=>setTitle(title)}
-                 value={title}
+                 onChangeText={(editTitle)=>setEditTitle(editTitle)}
+                 value={editTitle}
                  />
                 <TextInput style={writeStyle.TextAreaInput}
                     multiline={true}
                     numberOfLines={4}
                     placeholder="내용을 입력해주세요"
                     placeholderTextColor="#a5a5a5"
-                    onChangeText={(text)=>setText(text)}
-                    value={text}/>
+                    onChangeText={(editText)=>setEditText(editText)}
+                    value={editText}/>
                 <View style={writeStyle.priceInput} >
                     <View style={{width:200,flexDirection:"row",alignItems:"center"}}>
                         <Text style={{fontSize:16}}>가격</Text>
@@ -114,14 +90,14 @@ function Write(props) {
                         placeholder="예)10000" 
                         placeholderTextColor="#a5a5a5" 
                         style={writeStyle.PriceInputBox}
-                        onChangeText={(price)=>setPrice(price)}
-                        value={priceCheck===true?"가격협의":price}
+                        onChangeText={(editPrice)=>setEditPrice(editPrice)}
+                        value={editPriceCheck===true?"가격협의":editPrice||"0"}
                         keyboardType={"number-pad"}/>
-                        <Text style={{fontSize:16,margin:10,}}>{priceCheck===true?"":"원"}</Text>
+                        <Text style={{fontSize:16,margin:10,}}>{editPriceCheck===true?"":"원"}</Text>
                     </View>
-                    <TouchableOpacity style={writeStyle.priceCheckbox} onPress={()=>priceCheck?setPriceCheck(false):setPriceCheck(true)}>
+                    <TouchableOpacity style={writeStyle.priceCheckbox} onPress={()=>editPriceCheck?setEditPriceCheck(false):setEditPriceCheck(true)}>
                         <CheckBox 
-                        checked={priceCheck}
+                        checked={editPriceCheck}
                         style={writeStyle.checkbox}
                         color="#ff6767"/>
                         <Text>가격협의</Text>
@@ -134,9 +110,9 @@ function Write(props) {
                     style={{margin:15}}
                 >
                     <TouchableOpacity style={writeStyle.ImageAddBtn}>
-                    {image && <Image source={{ uri: image }} style={writeStyle.uploadImg}/>}
+                    {/* {image && <Image source={{ uri: image }} style={writeStyle.uploadImg}/>} */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={writeStyle.ImageAddBtn} onPress={pickImage} >
+                    <TouchableOpacity style={writeStyle.ImageAddBtn} >
                         <Image source={require('../assets/camera-white.png')} style={writeStyle.ImageAdd}/>
                         <Text style={{color:"#ffffff",fontSize:11}}>이미지 업로드</Text>
                     </TouchableOpacity>
@@ -231,4 +207,4 @@ const writeStyle = StyleSheet.create({
     }
 })
 
-export default Write;
+export default EditWrite;

@@ -6,8 +6,8 @@ import {Card} from 'native-base';
 function Home(props) {
     const backAction = () => {
         Alert.alert("확인", "종료 하시겠습니까?", [
-            { text: "취소", onPress: () => null, style: "cancel" }, 
-            {  text: "종료", onPress: () => BackHandler.exitApp() }
+            { text: "종료", onPress: () => BackHandler.exitApp() }, 
+            {  text: "취소", onPress: () => null, style: "cancel" }
         ]);
         return true;
     };

@@ -1,5 +1,9 @@
 import React, { useState, useEffect }  from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView, BackHandler, Alert, ScrollView } from 'react-native';
+import axios from 'axios';
+import ENV_FUNC from '../environment';
+const { SERVER_URL } = ENV_FUNC();
+
 import Item from '../component/Item';
 
 function Store(props) {
@@ -8,32 +12,39 @@ function Store(props) {
 
     const [ refresh, setRefresh ] = useState(false);
   
-    const [ itemList, setItemmList ] = useState([
-      { id: 0, name: "반찬1", image: "", content: "설명 부분입니다. 해당 내용은 반찬1 입니다.", user: "꼬부맘1", distance: "10km 이내", state: "판매" },
-      { id: 1, name: "반찬2", image: "", content: "설명 부분입니다. 해당 내용은 반찬2 입니다.", user: "꼬부맘2", distance: "11km 이내", state: "요청" },
-      { id: 2, name: "반찬3", image: "", content: "설명 부분입니다. 해당 내용은 반찬3 입니다.", user: "꼬부맘3", distance: "12km 이내", state: "판매" },
-      { id: 3, name: "반찬4", image: "", content: "설명 부분입니다. 해당 내용은 반찬4 입니다.", user: "꼬부맘4", distance: "13km 이내", state: "요청" },
-      { id: 4, name: "반찬5", image: "", content: "설명 부분입니다. 해당 내용은 반찬5 입니다.", user: "꼬부맘5", distance: "14km 이내", state: "판매" },
-      { id: 5, name: "반찬6", image: "", content: "설명 부분입니다. 해당 내용은 반찬6 입니다.", user: "꼬부맘6", distance: "15km 이내", state: "판매" },
-      { id: 6, name: "반찬7", image: "", content: "설명 부분입니다. 해당 내용은 반찬7 입니다.", user: "꼬부맘7", distance: "16km 이내", state: "요청" },
-      { id: 7, name: "반찬8", image: "", content: "설명 부분입니다. 해당 내용은 반찬8 입니다.", user: "꼬부맘8", distance: "17km 이내", state: "요청" },
-      { id: 8, name: "반찬9", image: "", content: "설명 부분입니다. 해당 내용은 반찬9 입니다.", user: "꼬부맘9", distance: "18km 이내", state: "판매" },
-      { id: 9, name: "반찬10", image: "", content: "설명 부분입니다. 해당 내용은 반찬10 입니다.", user: "꼬부맘10", distance: "19km 이내", state: "판매" },
-    ]);
-  
+
+    // 디비에서 가져온 데이터
+    const { items, setItems } = props.route.params;
     const menu = [
       { num: 0, text: "실시간판매" },
       { num: 1, text: "실시간요청" },
     ];
-  
-    function refreshFunc() {
+
+    useEffect(() => {
+    }, [items]);
+
+    async function refreshFunc() {
       setRefresh(true);
-      console.log("refresh !");
+
+      try {
+        const result = await axios.get(`${SERVER_URL}/board/all`);
+  
+        if(result.data && result.data.data) {
+          setItems(result.data.data);
+        } else {
+          throw "err";
+        }
+      } catch(err) {
+        Alert.alert("실패", "데이터 로드 중 에러가 발생했습니다. 다시 시도해 주세요.", [
+          { text: "확인", onPress: () => null, style: "cancel" }
+        ]);
+      }
+
       setRefresh(false);
     }
   
-    function itemClick(obj) {
-      props.navigation.navigate("Detail", obj);
+    function itemClick(data) {
+      props.navigation.navigate("Detail", data);
     }
   
     function menuClick(num) {
@@ -41,6 +52,16 @@ function Store(props) {
       setMenuBorder(num);
     }
   
+    function writeHandle(){
+      if(props.route.params.login.email){
+        props.navigation.navigate("Write");
+        return;
+      }
+      Alert.alert("확인", "로그인 후 이용해주세요.", [
+        { text: "로그인 하러가기", onPress: () => props.navigation.navigate("Login"), style: "cancel" },
+        { text: "취소", onPress: () => null, style: "cancel" }
+      ]);
+    }
     return (
       <View style={{height:"100%",backgroundColor:"#ffffff"}}>
          {/* menu */}
@@ -64,21 +85,41 @@ function Store(props) {
                       })
                   }
               </View>
-  
               {/* list */}
               <SafeAreaView style={listStyle.list}>
                   <FlatList 
-                      data={itemList}
+                      data={items}
                       renderItem={
-                          ({item}) => <Item 
-                              id={item.id}
-                              name={item.name}
-                              content={item.content}
-                              user={item.user}
-                              distance={item.distance}
-                              state={item.state}
-                              itemClick={itemClick}
-                          />
+                          ({item}) => {
+                            if(item.state==="판매" && menuBorder===0){
+                              console.log("a")
+                              return <Item 
+                                id={item.id}
+                                title={item.title}
+                                content={item.content}
+                                image={item.image}
+                                user={item.user.name}
+                                state={item.state}
+                                price={item.price}
+                                cate={item.category}
+                                data={item}
+                                itemClick={itemClick}
+                            />
+                            } else if(item.state === "요청" && menuBorder === 1) {
+                              return <Item 
+                                id={item.id}
+                                title={item.title}
+                                content={item.content}
+                                image={item.image}
+                                user={item.user.name}
+                                state={item.state}
+                                price={item.price}
+                                cate={item.category}
+                                data={item}
+                                itemClick={itemClick}
+                            />
+                            }
+                          }
                       }
                       keyExtractor={item => item.id.toString()}
                       contentContainerStyle={{ paddingBottom: 50 }}
@@ -87,7 +128,7 @@ function Store(props) {
                       style={listStyle.listView}
                   />
               </SafeAreaView>
-              <TouchableOpacity onPress={() => props.navigation.navigate("Write")} style={listStyle.addBtn}>
+              <TouchableOpacity onPress={writeHandle} style={listStyle.addBtn}>
                 <Image  source={require('../assets/add.png')}/>
               </TouchableOpacity>
       </View>
