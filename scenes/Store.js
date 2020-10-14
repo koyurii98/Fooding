@@ -31,6 +31,9 @@ function Store(props) {
     ];
 
     useEffect(() => {
+      return () => {
+        setRefresh(false);
+      }
     }, [items]);
 
     async function refreshFunc() {

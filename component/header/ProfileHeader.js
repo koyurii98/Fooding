@@ -1,7 +1,6 @@
 import React from 'react';
 import { View,Text,StyleSheet,Image,TouchableOpacity } from 'react-native';
 
-
 function ProfileHeader(props) {
   return (
   <View style={profileHeaderStyle.Header}>
@@ -12,9 +11,7 @@ function ProfileHeader(props) {
       />
     </TouchableOpacity>
     <Text style={profileHeaderStyle.edit}>프로필수정</Text>
-    <TouchableOpacity onPress={() => console.log("저장")}>
-      <Text style={profileHeaderStyle.save}>저장</Text>
-    </TouchableOpacity>
+    <Text></Text>
   </View>
   );
 }
@@ -31,12 +28,7 @@ const profileHeaderStyle = StyleSheet.create({
     color:"#474747",
     fontWeight:"700",
     textAlign:"center",
-  },
-  save: {
-    fontSize:18,
-    color:"#656565",
-    fontWeight:"700",
-    marginRight: 15
+    marginRight: 35
   }
 })
 export default ProfileHeader;

@@ -1,25 +1,49 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import axios from 'axios';
 
+import ENV_FUNC from '../../environment';
+const { SERVER_URL } = ENV_FUNC();
 
 import weIcon from '../../assets/we.png';
 import profileNull from '../../assets/profile.png';
 import profileBanner from '../../assets/profile_banner.png';
 import RightArrow from '../../assets/right_arrow.png';
 import settingBtn from '../../assets/setting_btn.png';
-import profileBannerBtn from '../../assets/profile_banner_btn.png';
 
 function Profile(props) {
+    const { login } = props.route.params;
+
+    const [ info, setInfo ] = useState({});
+
+    useEffect(() => {
+        userInfo();
+    }, []);
+
+    async function userInfo() {
+        try {
+            const result = await axios.get(`${SERVER_URL}/users/one?id=${login.id}`);
+
+            if(!result.data || !result.data.data) throw 500;
+
+            setInfo(result.data.data);
+        } catch(err) {
+            Alert.alert("오류", "프로필을 불러올 수 없습니다.", [
+                { text: "확인", onPress: () => null, style: "cancel" }
+            ]);
+        }
+    }
+
     return (
         <View style={profileStyle.container}>
             <View style={profileStyle.profile}>
-                <View style={{ }}>
-                    <Image source={profileNull} style={profileStyle.profileImage}/>
+                <View>
+                    <Image source={info.image || profileNull} style={profileStyle.profileImage}/>
                 </View>
                 <View style={{ width: "65%",margin:0,}}>
                     <View style={profileStyle.profileInfo}>
-                        <Text style={profileStyle.profileInfoName}>꼬부맘</Text>
-                        <TouchableOpacity onPress={() => props.navigation.navigate("ProfileEdit", {  })}>
+                        <Text style={profileStyle.profileInfoName}>{info.name}</Text>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("ProfileEdit", { login, info, setInfo })}>
                             <View style={{justifyContent:"space-between",flexDirection:"row",alignItems:"center"}}>
                                 <Text style={{ fontSize: 14 }}>프로필수정</Text>
                                 <Image source={settingBtn} style={{resizeMode:"contain",width:20,margin:5}}/>
@@ -28,7 +52,7 @@ function Profile(props) {
                     </View>
                     <View style={profileStyle.profileInfoSub}>
                         <Image style={profileStyle.profileInfoIcon} source={weIcon}/>
-                        <Text>서울 특별시 00구</Text>
+                        <Text>{info.address || "위치 인증이 필요합니다."}</Text>
                     </View>
                 </View>
             </View>
@@ -43,14 +67,14 @@ function Profile(props) {
 
                 <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
                     <View style={profileStyle.historyLayout}>
-                        <Text style={profileStyle.historyNum}>{15}</Text>
+                        <Text style={profileStyle.historyNum}>{0}</Text>
                         <Text>요청</Text>
                     </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => props.navigation.navigate("ProfileHistory", {  })}>
                     <View style={profileStyle.historyLayout}>
-                        <Text style={profileStyle.historyNum}>{4}</Text>
+                        <Text style={profileStyle.historyNum}>{0}</Text>
                         <Text>구매</Text>
                     </View>
                 </TouchableOpacity>

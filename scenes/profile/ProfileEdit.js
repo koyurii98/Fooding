@@ -1,7 +1,15 @@
-import React,{useState} from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity, TextInput, Switch, ScrollView } from 'react-native';
+import React , { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
+import * as Location from 'expo-location';
+import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
+
+import ENV_FUNC from '../../environment';
+const { SERVER_URL } = ENV_FUNC();
 
 function ProfileEdit(props) {
+    const { info, login, setInfo } = props.route.params;
+
     const [isMessage, setIsMessage] = useState(false);
     const [isEvent, setIsEvent] = useState(false);
     const [isKeyword, setIsKeyword] = useState(false);
@@ -9,6 +17,75 @@ function ProfileEdit(props) {
     const messageSwitch = () => setIsMessage(previousState => !previousState);
     const eventSwitch = () => setIsEvent(previousState => !previousState);
     const keywordSwitch = () => setIsKeyword(previousState => !previousState);
+
+    async function locationAuthen() {
+        const permission_ = await Location.hasServicesEnabledAsync();
+
+        if(!permission_) {
+            Alert.alert("확인", "위치 인증을 허용하여 주세요.", [
+                { text: "확인", onPress: () => null, style: "cancel" }
+            ]);
+            return false;
+        }
+
+        try {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert("확인", "위치 인증을 허용하여 주세요.", [
+                    { text: "확인", onPress: () => null, style: "cancel" }
+                ]);
+                return false;
+            }
+
+            let location_result = await Location.getCurrentPositionAsync({
+                accuracy : 4
+            });
+
+            const lng = location_result.coords.longitude;
+            const lat = location_result.coords.latitude;
+
+            const location = {
+                latitude: lat, 
+                longitude: lng
+            }
+
+            const result = await Location.reverseGeocodeAsync(location);
+
+            if(!result[0] || !result[0].region || !result[0].street || !result[0].postalCode) {
+                Alert.alert("확인", "현재 위치를 확인 할 수 없습니다. 다시 시도해 주세요.", [
+                    { text: "확인", onPress: () => null, style: "cancel" }
+                ]);
+            } else {
+                const address = `${result[0].region} ${result[0].street} ${result[0].postalCode}`;
+                Alert.alert("확인", `현재 위치로 위치 인증을 하시겠습니까?\n\n${result[0].region} ${result[0].street} ${result[0].postalCode}`, [
+                    { text: "확인", onPress: () => locationSave(address), style: "cancel" },
+                    { text: "취소", onPress: () => null, style: "cancel" }
+                ]);
+            }
+        } catch(err) {
+            Alert.alert("오류", "위치 인증을 할 수 없습니다.", [
+                { text: "확인", onPress: () => null, style: "cancel" }
+            ]);
+        }
+    }
+
+    async function locationSave(address) {
+        try {
+            const result = await axios.put(`${SERVER_URL}/users/update`, {
+                id : login.id,
+                address
+            });
+
+            if(!result.data || !result.data.data) throw 500;
+
+            setInfo(result.data.data);
+        } catch(err) {
+            Alert.alert("오류", "저장되지 않았습니다. 다시 시도해 주세요.", [
+                { text: "확인", onPress: () => null, style: "cancel" }
+            ]);
+        }
+    }
+
     return (
         <View style={ProfileEditStyle.ProfileEditBox}>
             <ScrollView>
@@ -23,20 +100,20 @@ function ProfileEdit(props) {
                     <View width="95%">
                         <View style={ProfileEditStyle.ProfileInfo}>
                             <Text style={ProfileEditStyle.ProfileInfoTitle}>이메일</Text>
-                            <Text style={ProfileEditStyle.ProfileInfoText}>abc@abc.com</Text>
+                            <Text style={ProfileEditStyle.ProfileInfoText}>{info.email}</Text>
                         </View>
                         <View style={ProfileEditStyle.ProfileInfo}>
                             <Text style={ProfileEditStyle.ProfileInfoTitle}>닉네임</Text>
-                            <TextInput style={ProfileEditStyle.ProfileEditInput}/>
+                            <Text style={ProfileEditStyle.ProfileInfoText}>{info.name}</Text>
                         </View>
                         <View style={{flexDirection:"column"}}>
                             <View style={ProfileEditStyle.ProfileInfo}>
                                 <Text style={ProfileEditStyle.ProfileInfoTitle}>주소</Text>
-                                <TouchableOpacity style={{width:"65%",justifyContent:"flex-start"}} onPress={()=>console.log("주소변경")}>
-                                    <Text style={ProfileEditStyle.addressBtn}>주소변경</Text>
+                                <TouchableOpacity style={{width:"65%",justifyContent:"flex-start"}} onPress={locationAuthen}>
+                                <Text style={ProfileEditStyle.addressBtn}>{info.address ? "주소 변경" : "위치 인증"}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <Text style={{width:"100%",marginBottom:10,color:"#5e5e5e",fontSize:16}}>서울특별시 관악구 가나다동 123-23</Text>
+                            <Text style={{width:"100%",marginBottom:10,color:"#5e5e5e",fontSize:16}}>{info.address || "위치 인증이 필요합니다."}</Text>
                             <Text style={{fontSize:13,color:"#ff6767",marginBottom:10}}>다른 사용자에게는 주소가 아닌 km가 표시됩니다.</Text>
                         </View>
                     </View>
