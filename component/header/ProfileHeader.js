@@ -21,7 +21,16 @@ const profileHeaderStyle = StyleSheet.create({
     flexDirection:"row",
     alignItems:"center",
     backgroundColor: "white",
-    paddingTop: 45,
+    paddingTop:35,
+    paddingBottom:15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
   edit: {
     fontSize:21,

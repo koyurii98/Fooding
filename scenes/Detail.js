@@ -1,14 +1,24 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import {ActionSheet} from 'native-base';
 import moment from 'moment';
 import axios from 'axios';
 
 import ENV_FUNC from '../environment';
 const { SERVER_URL } = ENV_FUNC();
 
+var BUTTONS = ["수정", "삭제", "취소"];
+var DESTRUCTIVE_INDEX = 1;
+var CANCEL_INDEX = 2;
+
+var D_BUTTONS = ["신고","취소"];
+var D_CANCEL_INDEX = 1;
+
 function Detail(props) {
     const { id, title, content, image, category, price, negotiation, state, user, createdAt, success, login, rooms, setRooms, socket } = props.route.params;
-
+    const [ clickbtn, setClickbtn ] = useState("");
+    const [ clickbtn_D, setClickbtn_D ] = useState("");
+   
     // 거래 신청 누를 경우
     const clickDeal = ()=>{
         if(!login.id || !login.email) {
@@ -65,6 +75,40 @@ function Detail(props) {
             );
         }
     }
+    //디테일메뉴
+    function menuClick(){
+        if(login.id===user.id){
+             ActionSheet.show(
+                {
+                    options: BUTTONS,
+                    cancelButtonIndex: CANCEL_INDEX,
+                    destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                    title: "메뉴"
+                },
+                buttonIndex =>{
+                    setClickbtn(BUTTONS[buttonIndex])
+                }
+            )
+            if(clickbtn===BUTTONS[0]){
+                props.navigation.navigate("EditWrite",{id, title, content, image, category, price, state, user, login})
+            }
+            if(clickbtn===BUTTONS[1]){
+                alert("삭제")
+            }
+        }else{
+            return ActionSheet.show(
+                {
+                    options: D_BUTTONS,
+                    cancelButtonIndex: D_CANCEL_INDEX,
+                    title: "메뉴"
+                },
+                buttonIndex =>{
+                    setClickbtn_D(D_BUTTONS[buttonIndex])
+                }
+            )
+        }
+       
+  }
 
     return (
         <View style={detailStyle.detailBox}>
@@ -75,7 +119,7 @@ function Detail(props) {
                         <Image style={{position:"relative",left:10,top:15}}source={require('../assets/retrunWhite.png')}/>
                     </TouchableOpacity>
                 </View>
-                <View style={{width:"100%",padding:17,borderBottomWidth:1,borderBottomColor:"#d2d2d2"}}>
+                <View style={{width:"100%",padding:17}}>
                     <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
                         <Text style={detailStyle.productTitle}>{`[${category}] `}{title}</Text>
                         <Text style={detailStyle.productState}>{state}</Text> 
@@ -85,6 +129,9 @@ function Detail(props) {
                         {content}
                     </Text>
                 </View>
+                <View style={detailStyle.price}>
+                    <Text style={detailStyle.priceText}>{price==="가격협의"?price:price+"원"}</Text>
+                </View>
                 <View style={detailStyle.userProfile}>
                     <View style={{flexDirection:"row",alignItems:"center"}}>
                         <Image style={{resizeMode:"contain",width:65,marginLeft:15}} source={require('../assets/profile.png')} />
@@ -93,7 +140,6 @@ function Detail(props) {
                                 <Image source={require('../assets/puddingIcon.png')}/>
                                 <Text style={detailStyle.userName}>{user.name}</Text>
                             </View>
-                            <Text style={detailStyle.Recent}>최근 5건의 거래를 하였습니다.</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={()=> alert("스토어")}>
@@ -103,7 +149,7 @@ function Detail(props) {
                 </View>
             </ScrollView>
             <View style={detailStyle.bottomBtns}>
-                    <TouchableOpacity style={detailStyle.BuyMenu} onPress={()=> alert('메뉴클릭')}>
+                    <TouchableOpacity style={detailStyle.BuyMenu} onPress={menuClick}>
                         <Image source={require('../assets/menu-White.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity 
@@ -153,7 +199,8 @@ const detailStyle = StyleSheet.create({
         fontSize:16,
         color:"#1d1d1d",
         lineHeight:25,
-        marginTop:10
+        marginBottom:10,
+        marginTop:10,
     },
     userProfile:{
         width:"100%",
@@ -161,6 +208,7 @@ const detailStyle = StyleSheet.create({
         justifyContent:"space-between",
         alignItems:"center",
         height:85,
+        marginTop:5,
     },
     userInfo:{
         flexDirection:"row",
@@ -182,6 +230,20 @@ const detailStyle = StyleSheet.create({
         width:60,
         height:60,
         marginRight:15,
+    },
+    price:{
+        flexDirection:"row",
+        width:"100%",
+        alignItems:"center",
+        borderBottomColor:"#d2d2d2",
+        borderBottomWidth:1,
+    },
+    priceText:{
+        fontSize:22,
+        color:"#646464",
+        margin:15,
+        width:"93%",
+        textAlign:"right"
     },
     bottomBtns:{
         display:"flex",

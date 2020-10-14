@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import {Card} from 'native-base';
 
 function Item(props) {
-    const { id, title, image, content, user, state, itemClick, data } = props;
+    const { id, title, image, content, user, state, itemClick, data, price,cate } = props;
         return <Card style={itemStyle.listCard}>
             <TouchableOpacity style={itemStyle.listBox} onPress={() => itemClick(data)}>
             <Image 
@@ -12,14 +12,15 @@ function Item(props) {
             ></Image>
             <View style={itemStyle.listContent}>
                 <View style={itemStyle.listLayout}>
-                    <Text style={{ fontSize: 20, marginBottom: 5 }}>{title}</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 5 }}>[{cate}]{title}</Text>
                     <Text style={{ color: "red" }}>{state}</Text>
                 </View>
                 <View>
-                    <Text style={{ color: "gray" }} numberOfLines={1}>{content}</Text>
+                    <Text style={{ color: "gray" }} numberOfLines={1}>{content.length>=20?content.slice(0,20)+"...":content}</Text>
                 </View>
                 <View style={itemStyle.listBotText}>
                     <Text>{user}</Text>
+                    <Text style={{fontSize:15}}>{price==="가격협의"?price:price+"원"}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -57,8 +58,11 @@ const itemStyle = StyleSheet.create({
     listBotText: {
         display: "flex", 
         flexDirection: "row", 
+        alignItems:"center",
+        justifyContent:"space-between",
         position: "absolute", 
-        bottom: 0
+        bottom: 0,
+        width:"100%",
     },
     listLine: {
         height: 20, 

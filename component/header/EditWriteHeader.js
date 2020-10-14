@@ -4,26 +4,26 @@ import axios from 'axios';
 import ENV_FUNC from '../../environment';
 const { SERVER_URL } = ENV_FUNC();
 
-function WriteHeader(props) {
+function EditWriteHeader(props) {
 
   async function uploadHandle(){
-    const {title,text,cate,price,uploadCate,userId,items,setItems,priceCheck}=props;
+    const {editTitle,editText,editCate,editPrice,editUploadCate,userId,items,setItems,editPriceCheck}=props;
     
-    if(!title || !text || !cate  || !uploadCate || !userId ){
+    if(!editTitle || !editText || !editCate  || !editUploadCate || !userId ){
       Alert.alert("경고", "빈칸이 있습니다. 빈칸을 모두 채워주세요.", [
         { text: "확인", onPress: () => null, style: "cancel" }
       ]);
       return;
     }
     try{
-      const result = await axios.post(`${SERVER_URL}/board/create`,{
-        title:props.title,
-        content:props.text,
-        category:props.cate,
-        price:props.priceCheck===true?"가격협의":props.price,
-        state:props.uploadCate,
+      const result = await axios.put(`${SERVER_URL}/board/update/${userId}`,{
+        title:props.editTitle,
+        content:props.editText,
+        category:props.editCate,
+        price:props.editPriceCheck===true?"가격협의":props.editPrice,
+        state:props.editUploadCate,
         userId:props.userId,
-        negotiation:props.priceCheck,
+        negotiation:props.editPriceCheck,
       });
       if(result.data && result.data.data){
         const arr = items;
@@ -45,9 +45,9 @@ function WriteHeader(props) {
         source={require('../../assets/retrun.png')}
       />
     </TouchableOpacity>
-    <Text style={WriteHeaderStyle.edit}>글쓰기</Text>
+    <Text style={WriteHeaderStyle.edit}>게시글수정</Text>
     <TouchableOpacity onPress={uploadHandle}>
-      <Text style={WriteHeaderStyle.save}>올리기</Text>
+      <Text style={WriteHeaderStyle.save}>수정</Text>
     </TouchableOpacity>
   </View>
   );
@@ -80,7 +80,7 @@ const WriteHeaderStyle = StyleSheet.create({
     fontSize:18,
     color:"#656565",
     fontWeight:"700",
-    marginRight: 15
+    marginRight: 18,
   }
 })
-export default WriteHeader;
+export default EditWriteHeader;

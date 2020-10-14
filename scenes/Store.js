@@ -12,19 +12,9 @@ function Store(props) {
 
     const [ refresh, setRefresh ] = useState(false);
   
-    const [ itemList, setItemmList ] = useState([
-      { id: 0, title: "반찬1", image: "", content: "설명 부분입니다. 해당 내용은 반찬1 입니다.", user: "꼬부맘1", state: "판매" },
-      { id: 1, title: "반찬2", image: "", content: "설명 부분입니다. 해당 내용은 반찬2 입니다.", user: "꼬부맘2", state: "요청" },
-      { id: 2, title: "반찬3", image: "", content: "설명 부분입니다. 해당 내용은 반찬3 입니다.", user: "꼬부맘3", state: "판매" },
-      { id: 3, title: "반찬4", image: "", content: "설명 부분입니다. 해당 내용은 반찬4 입니다.", user: "꼬부맘4", state: "요청" },
-      { id: 4, title: "반찬5", image: "", content: "설명 부분입니다. 해당 내용은 반찬5 입니다.", user: "꼬부맘5", state: "판매" },
-      { id: 5, title: "반찬6", image: "", content: "설명 부분입니다. 해당 내용은 반찬6 입니다.", user: "꼬부맘6", state: "판매" },
-      { id: 6, title: "반찬7", image: "", content: "설명 부분입니다. 해당 내용은 반찬7 입니다.", user: "꼬부맘7", state: "요청" },
-    ]);
 
     // 디비에서 가져온 데이터
     const { items, setItems } = props.route.params;
-  
     const menu = [
       { num: 0, text: "실시간판매" },
       { num: 1, text: "실시간요청" },
@@ -61,10 +51,19 @@ function Store(props) {
     }
   
     function menuClick(num) {
-      console.log("menu click", num)
       setMenuBorder(num);
     }
   
+    function writeHandle(){
+      if(props.route.params.login.email){
+        props.navigation.navigate("Write");
+        return;
+      }
+      Alert.alert("확인", "로그인 후 이용해주세요.", [
+        { text: "로그인 하러가기", onPress: () => props.navigation.navigate("Login"), style: "cancel" },
+        { text: "취소", onPress: () => null, style: "cancel" }
+      ]);
+    }
     return (
       <View style={{height:"100%",backgroundColor:"#ffffff"}}>
          {/* menu */}
@@ -88,22 +87,41 @@ function Store(props) {
                       })
                   }
               </View>
-  
               {/* list */}
               <SafeAreaView style={listStyle.list}>
                   <FlatList 
                       data={items}
                       renderItem={
-                          ({item}) => <Item 
-                              id={item.id}
-                              title={item.title}
-                              content={item.content}
-                              image={item.image}
-                              user={item.user.name}
-                              state={item.state}
-                              data={item}
-                              itemClick={itemClick}
-                          />
+                          ({item}) => {
+                            if(item.state==="판매" && menuBorder===0){
+                              console.log("a")
+                              return <Item 
+                                id={item.id}
+                                title={item.title}
+                                content={item.content}
+                                image={item.image}
+                                user={item.user.name}
+                                state={item.state}
+                                price={item.price}
+                                cate={item.category}
+                                data={item}
+                                itemClick={itemClick}
+                            />
+                            } else if(item.state === "요청" && menuBorder === 1) {
+                              return <Item 
+                                id={item.id}
+                                title={item.title}
+                                content={item.content}
+                                image={item.image}
+                                user={item.user.name}
+                                state={item.state}
+                                price={item.price}
+                                cate={item.category}
+                                data={item}
+                                itemClick={itemClick}
+                            />
+                            }
+                          }
                       }
                       keyExtractor={item => item.id.toString()}
                       contentContainerStyle={{ paddingBottom: 50 }}
@@ -112,7 +130,7 @@ function Store(props) {
                       style={listStyle.listView}
                   />
               </SafeAreaView>
-              <TouchableOpacity onPress={() => props.navigation.navigate("Write")} style={listStyle.addBtn}>
+              <TouchableOpacity onPress={writeHandle} style={listStyle.addBtn}>
                 <Image  source={require('../assets/add.png')}/>
               </TouchableOpacity>
       </View>

@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, Image } from 'react-native';
+import {Root} from 'native-base'
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,6 +22,7 @@ import Store from './scenes/Store';
 import List from './scenes/List';
 import Detail from './scenes/Detail';
 import Write from './scenes/Write';
+import EditWrite from './scenes/EditWrite';
 import ChatList from './scenes/chatlist/ChatList';
 import ChatListRoom from './scenes/chatlist/ChatListRoom';
 import Profile from './scenes/profile/Profile';
@@ -29,7 +31,6 @@ import ProfileHistory from './scenes/profile/ProfileHistory';
 import ProfileHeader from './component/header/ProfileHeader';
 
 import HistoryHeader from './component/header/HistoryHeader';
-import WriteHeader from './component/header/WriteHeader';
 
 const AppStack = createStackNavigator();
 
@@ -248,7 +249,8 @@ function HomeTab() {
     </TabNavigator.Navigator>
   }
 
-  return <NavigationContainer>
+  return<Root>
+    <NavigationContainer>
     <AppStack.Navigator initialParams={{ login }}>
       <AppStack.Screen name="First" component={First} options={{ headerShown: false }} />
       {
@@ -266,12 +268,21 @@ function HomeTab() {
           headerTitle: props => <Header {...props} /> 
         }} 
       />
-      <AppStack.Screen name="Write" component={Write} options={{ headerLeft: null,
+      <AppStack.Screen name="Write"  component={Write}
+        initialParams={{ login, items, setItems }}
+        options={{ 
           headerStyle: {
-            height: 90
+            height: 90,
           },
-          header: props => <WriteHeader {...props} /> 
-        }} 
+        }}
+      />
+       <AppStack.Screen name="EditWrite"  component={EditWrite}
+        initialParams={{ login, items, setItems }}
+        options={{ 
+          headerStyle: {
+            height: 90,
+          },
+        }}
       />
       <AppStack.Screen 
         name="ChatListRoom" 
@@ -283,6 +294,7 @@ function HomeTab() {
       />
     </AppStack.Navigator>
   </NavigationContainer>
+  </Root>
 }
 
 const tabStyle = StyleSheet.create({
