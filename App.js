@@ -55,6 +55,9 @@ function App() {
   useEffect(() => {
     storageCheck();
     itemsGet();
+    return () => {
+      socket.off("room receive");
+    }
   }, [login]);
 
   // 시큐어 스토리지 체크
@@ -70,6 +73,14 @@ function App() {
       }
       
       socket.emit("user connect", { msg : login.email });
+      socket.on("room receive", async (obj) => {
+        const roomData = await axios.get(`${SERVER_URL}/room/user/all?userId=${login.id}`);
+        if(!roomData.data || !roomData.data.data) {
+          return false;
+        } else {
+          setRooms(roomData.data.data);
+        }
+      });
     } catch(err) {
       console.log(err);
       Alert.alert("로그인 실패", "로그인 인증 중 에러가 발생했습니다. 앱을 다시 실행해주세요.",
@@ -138,7 +149,7 @@ function HomeTab() {
       <ChatListTabStack.Screen 
         name="ChatList" 
         component={ChatList} 
-        options={{ headerLeft: null }} 
+        options={{ headerLeft: null, headerTitle: "채팅" }} 
         initialParams={{ login, rooms, setRooms }}
       />
     </ChatListTabStack.Navigator>
@@ -208,7 +219,7 @@ function HomeTab() {
     >
       <TabNavigator.Screen name="Home" component={HomeTab} options={{ title : "홈" }} />
       <TabNavigator.Screen name="Store" component={StoreTab} options={{ title : "스토어" }} />
-      <TabNavigator.Screen name="ChatList" component={ChatListTab} options={{ title : "채팅" }} 
+      <TabNavigator.Screen name="ChatList" component={ChatListTab} options={{ title : "채팅" }}
         listeners={({ navigation }) => ({
           tabPress: e => {
             if(!login.email) {
@@ -247,7 +258,7 @@ function HomeTab() {
         <AppStack.Screen name="Login" component={Error} options={{ headerShown: false }} />
       }
       <AppStack.Screen name="Tab" component={Tab} options={{ headerShown: false }} />
-      <AppStack.Screen name="Detail" component={Detail} initialParams={{ login, rooms, setRooms }}
+      <AppStack.Screen name="Detail" component={Detail} initialParams={{ login, rooms, setRooms, socket }}
         options={{headerLeft: null,
           headerStyle: {
             height: 90
