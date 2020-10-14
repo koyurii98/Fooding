@@ -10,12 +10,11 @@ function ChatList(props) {
     function listClick(id, data, name, target_id) {
         props.navigation.navigate("ChatListRoom", {
             id,
-            data,
+            data : null,
             name,
             setRooms,
             login,
             target_id,
-            first : false
         });
     }
 

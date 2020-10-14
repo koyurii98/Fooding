@@ -8,7 +8,7 @@ const { SERVER_URL } = ENV_FUNC();
 import Header from '../../component/header/ChatListRoomHeader';
 
 function ChatListRoom(props) {
-    const { socket, id, name, data, first, login, target_id } = props.route.params;
+    const { socket, id, name, data, login, target_id } = props.route.params;
 
     const [ menu, setMenu ] = useState(false);
     const [ text, setText ] = useState("");
@@ -19,9 +19,6 @@ function ChatListRoom(props) {
     const scrollRef = useRef(null);
     
     useEffect(() => {
-        if(first) {
-            console.log("first");
-        }
         msgInit();
 
         socket.on("msg receive", (data) => {
@@ -50,10 +47,6 @@ function ChatListRoom(props) {
 
     async function msgPost() {
         if(!text || /^\s*$/.test(text)) {
-            return false;
-        }
-
-        if(!377) {
             return false;
         }
 

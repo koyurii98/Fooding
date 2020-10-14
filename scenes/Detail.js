@@ -40,7 +40,11 @@ function Detail(props) {
 
             if(!result.data || !result.data.data) throw 500;
 
-            if(!result.data.ovl) setRooms(rooms.concat(result.data.data));
+            let first = false;
+            if(!result.data.ovl) {
+                setRooms(rooms.concat(result.data.data));
+                first = true;
+            }
 
             socket.emit("room create", {
                 msg : result.data.data,
@@ -49,11 +53,10 @@ function Detail(props) {
 
             props.navigation.navigate("ChatListRoom", {
                 id : result.data.data.id,
-                data : props.route.params,
+                data : first ? props.route.params : null,
                 name : user.name,
                 login,
                 target_id : user.id,
-                first: true
             });
         } catch(err) {
             Alert.alert("오류", "거래 신청에 실패하였습니다.", [
