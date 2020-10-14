@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, TextInput, Image, ScrollView} from 'react-native';
-import { Container, Item, Picker,CheckBox } from 'native-base';
+import {Item,Picker} from 'native-base';
 
-function Store(props) {
+
+function Write(props) {
+    const [text , setText]=useState('');
+    const [title , setTitle]=useState('');
+    const [cate , setCate]=useState('');
+    const [uploadCate , setUploadCate]=useState('');
+    const [price , setPrice]=useState('');
+    const [photo , setPhoto]=useState(null);
+
+    console.log(text,price,title,cate,uploadCate,price);
+
     return (
         <View style={writeStyle.form}>
             <ScrollView>
@@ -10,34 +20,53 @@ function Store(props) {
                     <Item picker style={{width:"49%"}}>
                     <Picker
                         mode="dropdown"
+                        onValueChange={(uploadCate)=>setUploadCate(uploadCate)}
+                        selectedValue={uploadCate}
                     >
-                        <Picker.Item label="판매" value="key0" />
-                        <Picker.Item label="요청" value="key1" />
+                        <Picker.Item label="판매/요청선택" value="판매/요청선택" color="#7e7e7e"/>
+                        <Picker.Item label="판매" value="판매" />
+                        <Picker.Item label="요청" value="요청" />
                     </Picker>
                     </Item>
                     <Item picker style={{width:"49%"}}>
                     <Picker
                         mode="dropdown"
+                        onValueChange={(cate)=>setCate(cate)}
+                        selectedValue={cate}
                     >
-                        <Picker.Item label="과일" value="key0" />
-                        <Picker.Item label="채소" value="key1" />
-                        <Picker.Item label="해산물" value="key2" />
-                        <Picker.Item label="육류" value="key3" />
-                        <Picker.Item label="밥/반찬" value="key4" />
-                        <Picker.Item label="냉동식품" value="key5" />
-                        <Picker.Item label="제과/제빵" value="key6" />
-                        <Picker.Item label="디저트/간식" value="key7" />
+                        <Picker.Item label="카테고리" value="카테고리" color="#7e7e7e"/>
+                        <Picker.Item label="과일" value="과일" />
+                        <Picker.Item label="채소" value="채소" />
+                        <Picker.Item label="해산물" value="해산물" />
+                        <Picker.Item label="육류" value="육류" />
+                        <Picker.Item label="밥/반찬" value="밥/반찬" />
+                        <Picker.Item label="냉동식품" value="냉동식품" />
+                        <Picker.Item label="제과/제빵" value="제과/제빵" />
+                        <Picker.Item label="디저트/간식" value="디저트/간식" />
                     </Picker>
                     </Item>
                 </View>
-                <TextInput style={writeStyle.TextInput} placeholder="제목을 입력해주세요" placeholderTextColor="#a5a5a5"/>
+                <TextInput style={writeStyle.TextInput}
+                 placeholder="제목을 입력해주세요" 
+                 placeholderTextColor="#a5a5a5"
+                 onChangeText={(title)=>setTitle(title)}
+                 value={title}
+                 />
                 <TextInput style={writeStyle.TextAreaInput}
                     multiline={true}
                     numberOfLines={4}
                     placeholder="내용을 입력해주세요"
-                    placeholderTextColor="#a5a5a5"/>
+                    placeholderTextColor="#a5a5a5"
+                    onChangeText={(text)=>setText(text)}
+                    value={text}/>
                 <View style={writeStyle.priceInput} >
-                    <TextInput placeholder="가격을 입력해주세요" placeholderTextColor="#a5a5a5" style={writeStyle.PriceInputBox}/>
+                    <TextInput 
+                    placeholder="가격을 입력해주세요" 
+                    placeholderTextColor="#a5a5a5" 
+                    style={writeStyle.PriceInputBox}
+                    onChangeText={(price)=>setPrice(price)}
+                    value={price}
+                    keyboardType={"number-pad"}/>
                 </View>
                 <ScrollView
                 horizontal={true}
@@ -45,18 +74,9 @@ function Store(props) {
                 scrollEventThrottle={200}
                 style={{margin:15}}>
                     <TouchableOpacity style={writeStyle.ImageAddBtn}>
-            
+                       
                     </TouchableOpacity>
-                    <TouchableOpacity style={writeStyle.ImageAddBtn}>
-                    
-                    </TouchableOpacity>
-                    <TouchableOpacity style={writeStyle.ImageAddBtn}>
-                
-                    </TouchableOpacity>
-                    <TouchableOpacity style={writeStyle.ImageAddBtn}>
-                        
-                    </TouchableOpacity>
-                    <TouchableOpacity style={writeStyle.ImageAddBtn}>
+                    <TouchableOpacity style={writeStyle.ImageAddBtn} >
                         <Image source={require('../assets/camera-white.png')} style={writeStyle.ImageAdd}/>
                         <Text style={{color:"#ffffff",fontSize:11}}>이미지 업로드</Text>
                     </TouchableOpacity>
@@ -125,4 +145,4 @@ const writeStyle = StyleSheet.create({
     }
 })
 
-export default Store;
+export default Write;

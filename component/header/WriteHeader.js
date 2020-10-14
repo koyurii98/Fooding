@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View,Text,StyleSheet,Image,TouchableOpacity } from 'react-native';
 
 function WriteHeader(props) {
+  
+
   return (
     <View style={WriteHeaderStyle.Header}>
     <TouchableOpacity onPress={() => props.navigation.goBack()}>
@@ -11,7 +13,7 @@ function WriteHeader(props) {
       />
     </TouchableOpacity>
     <Text style={WriteHeaderStyle.edit}>글쓰기</Text>
-    <TouchableOpacity onPress={() => console.log("올리기")}>
+    <TouchableOpacity onPress={()=>alert("")}>
       <Text style={WriteHeaderStyle.save}>올리기</Text>
     </TouchableOpacity>
   </View>
@@ -20,11 +22,20 @@ function WriteHeader(props) {
 
 const WriteHeaderStyle = StyleSheet.create({
   Header:{
-    flex: 1,
     justifyContent:"space-between",
     flexDirection:"row",
     alignItems:"center",
     backgroundColor: "white",
+    paddingTop:35,
+    paddingBottom:15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
   edit: {
     fontSize:21,

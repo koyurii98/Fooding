@@ -208,12 +208,18 @@ function App() {
           },
           headerTitle: props => <Header {...props} /> 
         }} />
-      <AppStack.Screen name="Write" component={Write} options={{ headerLeft: null,
-          headerStyle: {
-            height: 90
-          },
-          headerTitle: props => <WriteHeader {...props} /> 
-        }}  />
+      <AppStack.Screen name="Write"  component={Write} options={{ 
+        headerShown: true,
+        header: ({ navigation}) => {
+          return <WriteHeader navigation={navigation}
+          />
+        },
+        headerLeft: null,  
+        headerStyle: {
+          height: 90,
+        },
+        }}
+        />
       <AppStack.Screen 
         name="ChatListRoom" 
         component={ChatListRoom} 

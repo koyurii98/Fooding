@@ -21,8 +21,6 @@ function Item(props) {
                 </View>
                 <View style={itemStyle.listBotText}>
                     <Text>{user}</Text>
-                    <View style={itemStyle.listLine}></View>
-                    <Text>{distance}</Text>
                 </View>
             </View>
         </TouchableOpacity>
