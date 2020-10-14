@@ -29,7 +29,8 @@ function ChatListRoom(props) {
         });
 
         return () => {
-            socket.on("msg receive");
+            setLoad(false);
+            socket.off("msg receive");
         }
     }, [load]);
 
@@ -52,7 +53,7 @@ function ChatListRoom(props) {
             return false;
         }
 
-        if(!target_id) {
+        if(!377) {
             return false;
         }
 
@@ -91,6 +92,7 @@ function ChatListRoom(props) {
             >
                 {
                     msg.map(value => {
+                        const myMsg = value.send_id === login.id ? true : false;
                         return <View 
                             key={value.id}
                             style={{
@@ -99,18 +101,19 @@ function ChatListRoom(props) {
                                 justifyContent: "space-between"
                             }}
                         >
-                            {/* { user.id === target && <Text></Text> } */}
+                            { myMsg && <Text></Text> }
                             <Text style={{
                                 maxWidth: "60%",
-                                backgroundColor: "white",
+                                backgroundColor: myMsg ? "white" : "rgba(255, 238, 238, 0.41)",
                                 borderWidth: 1,
                                 borderRadius: 7,
-                                borderColor: "#d8d8d8",
+                                borderColor: myMsg ? "#d8d8d8" : "rgba(255, 78, 78, 0.3)",
                                 marginTop: 15,
                                 marginBottom: 15,
                                 marginLeft: 15,
                                 marginRight: 15,
-                                padding: 13
+                                padding: 13,
+                                color: "#1d1d1d"
                             }}>{value.content}</Text>
                         </View>
                     })
