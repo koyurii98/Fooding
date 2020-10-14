@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, Image } from 'react-native';
-import {Root} from 'native-base'
+import { Root } from 'native-base'
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -59,22 +59,32 @@ function App() {
     return () => {
       socket.off("room receive");
     }
-  }, [login]);
+  }, []);
 
   // 시큐어 스토리지 체크
   async function storageCheck() {
     try {
-      let result = await SecureStore.getItemAsync("fooding_user");
-      console.log("storage check");
-      if(result) {
-        result = JSON.parse(result);
-        // server user sign check code ..
+      let userInfo = await SecureStore.getItemAsync("fooding_user");
 
-        setLogin(result.email);
+      console.log("storage check", userInfo);
+
+      // 스토리지에 값이 있을 경우
+      if(userInfo) {
+        userInfo = JSON.parse(userInfo);
+
+        const roomData = await axios.get(`${SERVER_URL}/room/user/all?userId=${userInfo.id}`);
+
+        if(!roomData.data || !roomData.data.data) throw 500;
+
+        setRooms(roomData.data.data);
+
+        socket.emit("join", { id : userInfo.id });
+
+        setLogin(userInfo);
       }
       
       socket.emit("user connect", { msg : login.email });
-      socket.on("room receive", async (obj) => {
+      socket.on("room receive", async () => {
         const roomData = await axios.get(`${SERVER_URL}/room/user/all?userId=${login.id}`);
         if(!roomData.data || !roomData.data.data) {
           return false;
@@ -83,7 +93,6 @@ function App() {
         }
       });
     } catch(err) {
-      console.log(err);
       Alert.alert("로그인 실패", "로그인 인증 중 에러가 발생했습니다. 앱을 다시 실행해주세요.",
         [{ text: "확인", onPress: () => null, style: "cancel" }, ]
       );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
 import ENV_FUNC from '../../environment';
@@ -39,6 +40,8 @@ function Login(props) {
             setRooms(roomData.data.data);
 
             socket.emit("join", { id : userInfo.id });
+
+            await SecureStore.setItemAsync("fooding_user", JSON.stringify(userInfo));
 
             props.navigation.navigate("Tab", { screen : "Home" });
 
